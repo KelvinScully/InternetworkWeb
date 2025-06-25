@@ -1,3 +1,5 @@
+using Common;
+using Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,12 +11,30 @@ namespace MvcApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            
+            // Access config settings
+            var config = builder.Configuration;
+            var connectionSection = config.GetSection("ApiSettings");
+
+            // Pull UseLocalApi toggle
+            bool useLocalApi = connectionSection.GetValue<bool>("UseLocalApi");
+
+            // Pull correct connection string
+            string connectionString = useLocalApi ? connectionSection.GetValue<string>("LocalApi") : connectionSection.GetValue<string>("PublishedApi");
+            bool isIISExpress = Environment.GetEnvironmentVariable("ASPNETCORE_HOSTINGSTARTUPASSEMBLIES")?.Contains("IIS") ?? false;
+
+
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
+
+            builder.Services.AddSingleton(new ConnectionOptions
+            {
+                ConnectionString = connectionString,
+                IsLocal = useLocalApi,
+                IsIISExpress = isIISExpress
+            });
+
+            builder.Services.AddRepository();
 
             var app = builder.Build();
 
