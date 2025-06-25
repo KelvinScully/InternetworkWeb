@@ -59,7 +59,7 @@ namespace MvcApp
 
             app.MapControllerRoute(
                 name: "areas",
-                pattern: "{area:exists}/{controller=Account}/{action=Index}/{id?}");
+                pattern: "{area:exists}/{controller=Inventory}/{action=Index}/{id?}");
 
             app.MapControllerRoute(
                 name: "default",
