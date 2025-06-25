@@ -1,21 +1,24 @@
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MvcApp.Models;
+using Repository.Interfaces;
 
 namespace MvcApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ITestRepository _testRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ITestRepository testRepo)
         {
-            _logger = logger;
+            _testRepository = testRepo;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var result = await _testRepository.TestItemGet(1);
+            return View(result.Value);
         }
 
         public IActionResult Privacy()
