@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
 using MvcApp.areas.Account.Model;
+using System.Net.NetworkInformation;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace MvcApp.Areas.Account.Controllers
@@ -18,7 +20,7 @@ namespace MvcApp.Areas.Account.Controllers
         [HttpGet("")]
         public IActionResult Index()
         {
-            if (!User.Identity?.IsAuthenticated ?? false)
+            if (User.IsInRole("Guest"))
                 return RedirectToAction("Gate");
 
             return View();
