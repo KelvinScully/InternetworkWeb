@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
+using MvcApp.areas.Account.Model;
 using System.Text.Json;
 
 namespace MvcApp.Areas.Account.Controllers
@@ -31,22 +33,54 @@ namespace MvcApp.Areas.Account.Controllers
         }
 
         // =======================
-        // Form Actions (Posts)
+        // Form Actions
         // =======================
 
         [HttpPost("Login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromForm] string payload)
         {
-            // TODO: Deserialize and authenticate user
-            return RedirectToAction("Index");
+            if (string.IsNullOrWhiteSpace(payload)) return RedirectToAction("Gate");
+            LoginRegisterModel? model;
+            try
+            {
+                model = JsonSerializer.Deserialize<LoginRegisterModel>(payload);
+            }
+            catch
+            {
+                TempData["LoginError"] = "Invalid Login information.";
+                return RedirectToAction("Gate");
+            }
+
+            if (model == null || model.IsNullOrEmptyForLogin()) return RedirectToAction("Gate");
+
+            // Proceed with auth logic
+            TempData["LoginData"] = JsonSerializer.Serialize(model);
+            return RedirectToAction("Gate");
         }
 
         [HttpPost("Register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromForm] string payload)
         {
-            // TODO: Deserialize and register user
+            if (string.IsNullOrWhiteSpace(payload))
+                return RedirectToAction("Gate");
+
+            LoginRegisterModel? model;
+            try
+            {
+                model = JsonSerializer.Deserialize<LoginRegisterModel>(payload);
+            }
+            catch
+            {
+                TempData["RegistrationError"] = "Invalid Registration information.";
+                return RedirectToAction("Gate");
+            }
+
+            if (model == null || model.IsNullOrEmptyForRegistration())
+                return RedirectToAction("Gate");
+
+            // Proceed with auth logic
             return RedirectToAction("Index");
         }
     }

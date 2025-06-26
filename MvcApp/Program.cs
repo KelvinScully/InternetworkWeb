@@ -1,7 +1,8 @@
 using Common;
-using Repository;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Repository;
 
 namespace MvcApp
 {
@@ -34,6 +35,20 @@ namespace MvcApp
                 IsIISExpress = isIISExpress
             });
 
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Account/Gate";
+                options.LogoutPath = "/Account/Logout";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                options.SlidingExpiration = true;
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+            });
+
+            builder.Services.AddAuthorization();
+
             builder.Services.AddRepository();
 
             var app = builder.Build();
@@ -41,6 +56,7 @@ namespace MvcApp
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
             }
             else
@@ -55,6 +71,9 @@ namespace MvcApp
 
             app.UseRouting();
 
+            app.UseMiddleware<GuestUserMiddleware>();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
