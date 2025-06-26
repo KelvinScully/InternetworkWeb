@@ -1,0 +1,127 @@
+﻿@using MvcApp.areas.Account.Model
+@using System.Text.Json
+@{ Layout = null; }
+@{
+    var loginJson = TempData["LoginData"] as string;
+    var loginModel = string.IsNullOrWhiteSpace(loginJson) ? new LoginRegisterModel() : JsonSerializer.Deserialize<LoginRegisterModel>(loginJson);
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <!-- Login Modal -->
+    @if (TempData["LoginError"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["LoginError"]
+        </div>
+    }
+
+    <div id="loginModal" class="modal" style="display: block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Login</h5>
+                </div>
+
+                <div class="modal-body">
+                    <div>
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input class="form-control" id="loginUsername" type="text" placeholder="Username" value="@loginModel?.Username" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input class="form-control" id="loginPassword" type="password" placeholder="Password" value="@loginModel?.Password" />
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" id="loginRememberme" type="checkbox" @(loginModel?.RememberMe == true ? "checked" : "") />
+                            <label class="form-check-label">Remember Me</label>
+                        </div>
+
+                        <button class="btn btn-primary w-100" id="loginButton" type="button">Login</button>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <p class="mb-0">
+                        Don't have an account?
+                        <a href="#" onclick="toggleModal('registerModal', 'loginModal')">Register</a>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Register</h5>
+                </div>
+
+                <div class="modal-body">
+                    <div>
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input class="form-control" id="registerUsername" type="text" placeholder="Username" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input class="form-control" id="registerPassword" type="password" placeholder="Password" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input class="form-control" id="registerEmail" type="email" placeholder="account@@domain.com" />
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input type="checkbox" id="registerRememberme" class="form-check-input" />
+                            <label class="form-check-label">Remember Me</label>
+                        </div>
+
+                        <button class="btn btn-primary w-100" id="registerButton" type="button">Register</button>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <p class="mb-0">
+                        Have an account?
+                        <a href="#" onclick="toggleModal('loginModal', 'registerModal')">Log In</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controller Action -->
+    <form id="loginForm" action="/Account/Login" method="post">
+        <input type="text" id="loginJson" name="payload" value="" style="display:none" />
+    </form>
+    <form id="registerForm" action="/Account/Register" method="post">
+        <input type="text" id="registerJson" name="payload" value="" style="display:none" />
+    </form>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/Account/Gate.js"></script>
+</body>
+
+</html>
+
+
+
