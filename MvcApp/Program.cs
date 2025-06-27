@@ -2,6 +2,7 @@ using Common;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MvcApp.Services;
 using Repository;
 
 namespace MvcApp
@@ -46,10 +47,13 @@ namespace MvcApp
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.SameSite = SameSiteMode.Strict;
             });
+            builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddAuthorization();
 
             builder.Services.AddRepository();
+            builder.Services.AddScoped<AccountService>();
+
 
             var app = builder.Build();
 
@@ -67,13 +71,13 @@ namespace MvcApp
             }
 
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
 
-            app.UseMiddleware<GuestUserMiddleware>();
-
             app.UseAuthentication();
+            app.UseMiddleware<GuestUserMiddleware>();
             app.UseAuthorization();
 
             app.MapControllerRoute(

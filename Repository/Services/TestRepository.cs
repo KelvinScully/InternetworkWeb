@@ -23,18 +23,20 @@ namespace Repository.Services
                     return new ApiResult<TestItem>
                     {
                         IsSuccessful = false,
+                        Value = new(),
                         Message = $"Failed with status code: {response.StatusCode}"
                     };
                 }
 
                 var result = await response.Content.ReadFromJsonAsync<ApiResult<TestItem>>();
-                return result ?? new ApiResult<TestItem> { IsSuccessful = false, Message = "Empty result" };
+                return result ?? new ApiResult<TestItem> { IsSuccessful = false, Value = new(), Message = "Empty result" };
             }
             catch (Exception ex)
             {
                 return new ApiResult<TestItem>
                 {
                     IsSuccessful = false,
+                    Value = new(),
                     Message = $"Exception: {ex.Message}"
                 };
             }
