@@ -14,6 +14,7 @@ namespace Repository
         public static IServiceCollection AddRepository(this IServiceCollection services)
         {
             services.AddScoped<ITestRepository, TestRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
             return services;
         }
     }

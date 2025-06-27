@@ -26,6 +26,7 @@ public class GuestUserMiddleware
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
+            context.User = principal;
             await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
             {
                 IsPersistent = false
