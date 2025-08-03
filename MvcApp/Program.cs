@@ -1,7 +1,11 @@
+using AutoMapper;
 using BusinessLogicLayer;
 using Common;
 using DataAccessLayer;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Logging.Abstractions;
+using MvcApp.AutoMapper;
+using MvcApp.Services;
 using Repository;
 
 namespace MvcApp
@@ -10,7 +14,14 @@ namespace MvcApp
     {
         public static IServiceCollection AddMVCAppServices(this IServiceCollection services)
         {
+            var configExpr = new MapperConfigurationExpression();
+            configExpr.AddProfile<AutoMapperProfile>();
+            var mappingConfig = new MapperConfiguration(configExpr, NullLoggerFactory.Instance);
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
             //services.AddScoped<Interface, Implementation>();
+            services.AddScoped<IInventoryService, InventoryService>();
             return services;
         }
     }
@@ -47,6 +58,7 @@ namespace MvcApp
             builder.Services.AddDataAccessServices();
             builder.Services.AddBusinessLogicServices();
             builder.Services.AddRepositoryServices();
+            builder.Services.AddMVCAppServices();
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
