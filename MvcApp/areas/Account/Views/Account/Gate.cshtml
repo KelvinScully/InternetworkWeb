@@ -1,10 +1,5 @@
-﻿@using MvcApp.areas.Account.Model
-@using System.Text.Json
+﻿@using System.Text.Json
 @{ Layout = null; }
-@{
-    var loginJson = TempData["LoginData"] as string;
-    var loginModel = string.IsNullOrWhiteSpace(loginJson) ? new LoginRegisterModel() : JsonSerializer.Deserialize<LoginRegisterModel>(loginJson);
-}
 
 <!DOCTYPE html>
 <html>
@@ -35,16 +30,16 @@
                     <div>
                         <div class="mb-3">
                             <label class="form-label">Username</label>
-                            <input class="form-control" id="loginUsername" type="text" placeholder="Username" value="@loginModel?.Username" />
+                            <input class="form-control" id="loginUsername" type="text" placeholder="Username" value="" />
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Password</label>
-                            <input class="form-control" id="loginPassword" type="password" placeholder="Password" value="@loginModel?.Password" />
+                            <input class="form-control" id="loginPassword" type="password" placeholder="Password" value="" />
                         </div>
 
                         <div class="form-check mb-3">
-                            <input class="form-check-input" id="loginRememberme" type="checkbox" @(loginModel?.RememberMe == true ? "checked" : "") />
+                            <input class="form-check-input" id="loginRememberme" type="checkbox" value="" />
                             <label class="form-check-label">Remember Me</label>
                         </div>
 

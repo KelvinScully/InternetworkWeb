@@ -1,25 +1,28 @@
-using System.Diagnostics;
-using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MvcApp.Models;
-using Repository.Interfaces;
 using MvcApp.Services;
+using System.Diagnostics;
 
 namespace MvcApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ITestRepository _testRepository;
+        private IInventoryService _Service;
+        private IMapper _Mapper;
 
-        public HomeController(ITestRepository testRepo)
+        public HomeController(
+            IInventoryService service,
+            IMapper mapper)
         {
-            _testRepository = testRepo;
+            _Service = service;
+            _Mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
         {
-            var result = await _testRepository.TestItemGet(1);
-            return View(result.Value);
+            var items = await _Service.GetitemStatus(1);
+            return View(items);
         }
 
         public IActionResult Privacy()
