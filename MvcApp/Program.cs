@@ -1,5 +1,8 @@
+using BusinessLogicLayer;
 using Common;
+using DataAccessLayer;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Repository;
 
 namespace MvcApp
 {
@@ -40,6 +43,10 @@ namespace MvcApp
                 IsLocal = useLocalApi,
                 IsIISExpress = isIISExpress
             });
+
+            builder.Services.AddDataAccessServices();
+            builder.Services.AddBusinessLogicServices();
+            builder.Services.AddRepositoryServices();
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>

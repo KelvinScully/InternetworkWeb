@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using DataAccessLayer.Interfaces;
+using DataAccessLayer.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DataAccessLayer
 {
@@ -7,6 +9,7 @@ namespace DataAccessLayer
         public static IServiceCollection AddDataAccessServices(this IServiceCollection services)
         {
             //services.AddScoped<Interface, Implementation>();
+            services.AddScoped<IInventoryDalService, InventoryDalService>();
             return services;
         }
     }

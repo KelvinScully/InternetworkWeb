@@ -8,7 +8,7 @@ namespace BusinessLogicLayer.Services
 {
     internal class InventoryBllService(IInventoryDalService dal) : IInventoryBllService
     {
-        private IInventoryDalService _Dal = dal;
+        private readonly IInventoryDalService _Dal = dal;
 
         public async Task<ApiResult<ItemStatusApo>> GetItemStatus(int itemStatusId)
         {

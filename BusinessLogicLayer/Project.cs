@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using BusinessLogicLayer.Interfaces;
+using BusinessLogicLayer.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BusinessLogicLayer
 {
@@ -7,6 +9,7 @@ namespace BusinessLogicLayer
         public static IServiceCollection AddBusinessLogicServices(this IServiceCollection services)
         {
             //services.AddScoped<Interface, Implementation>();
+            services.AddScoped<IInventoryBllService, InventoryBllService>();
             return services;
         }
     }
