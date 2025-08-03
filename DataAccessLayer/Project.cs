@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Repository
+namespace DataAccessLayer
 {
-    public static class RepositoryService
+    public static class DataAccessServiceRegistration
     {
-        public static IServiceCollection AddRepository(this IServiceCollection services)
+        public static IServiceCollection AddDataAccessServices(this IServiceCollection services)
         {
             //services.AddScoped<Interface, Implementation>();
             return services;
         }
     }
+
 }

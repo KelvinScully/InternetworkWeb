@@ -1,25 +1,15 @@
-using System.Diagnostics;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MvcApp.Models;
-using Repository.Interfaces;
-using MvcApp.Services;
+using System.Diagnostics;
 
 namespace MvcApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ITestRepository _testRepository;
-
-        public HomeController(ITestRepository testRepo)
-        {
-            _testRepository = testRepo;
-        }
 
         public async Task<IActionResult> Index()
         {
-            var result = await _testRepository.TestItemGet(1);
-            return View(result.Value);
+            return View();
         }
 
         public IActionResult Privacy()

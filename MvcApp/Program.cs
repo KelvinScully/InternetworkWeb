@@ -1,12 +1,17 @@
 using Common;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using MvcApp.Services;
-using Repository;
 
 namespace MvcApp
 {
+    public static class MVCAppServiceRegistration
+    {
+        public static IServiceCollection AddMVCAppServices(this IServiceCollection services)
+        {
+            //services.AddScoped<Interface, Implementation>();
+            return services;
+        }
+    }
+
     public class Program
     {
         public static void Main(string[] args)
@@ -51,9 +56,7 @@ namespace MvcApp
 
             builder.Services.AddAuthorization();
 
-            builder.Services.AddRepository();
-            builder.Services.AddScoped<AccountService>();
-
+            builder.Services.AddMvc();
 
             var app = builder.Build();
 
