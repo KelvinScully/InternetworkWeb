@@ -12,10 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
     <Folder Include="ManualMappings\" />
-    <Folder Include="Objects\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
