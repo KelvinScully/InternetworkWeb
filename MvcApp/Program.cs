@@ -1,12 +1,31 @@
+using AutoMapper;
+using BusinessLogicLayer;
 using Common;
+using DataAccessLayer;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
+using MvcApp.AutoMapper;
 using MvcApp.Services;
 using Repository;
 
 namespace MvcApp
 {
+    public static class MVCAppServiceRegistration
+    {
+        public static IServiceCollection AddMVCAppServices(this IServiceCollection services)
+        {
+            var configExpr = new MapperConfigurationExpression();
+            configExpr.AddProfile<AutoMapperProfile>();
+            var mappingConfig = new MapperConfiguration(configExpr, NullLoggerFactory.Instance);
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            //services.AddScoped<Interface, Implementation>();
+            services.AddScoped<IInventoryService, InventoryService>();
+            return services;
+        }
+    }
+
     public class Program
     {
         public static void Main(string[] args)
@@ -15,13 +34,13 @@ namespace MvcApp
 
             // Access config settings
             var config = builder.Configuration;
-            var connectionSection = config.GetSection("ApiSettings");
+            var connectionSection = config.GetSection("DbSettings");
 
             // Pull UseLocalApi toggle
-            bool useLocalApi = connectionSection.GetValue<bool>("UseLocalApi");
+            bool useLocalDb = connectionSection.GetValue<bool>("UseLocalDb");
 
             // Pull correct connection string
-            string connectionString = useLocalApi ? connectionSection.GetValue<string>("LocalApi") : connectionSection.GetValue<string>("PublishedApi");
+            string connectionString = useLocalDb ? connectionSection.GetValue<string>("LocalDb") : connectionSection.GetValue<string>("PublishedDb");
             bool isIISExpress = Environment.GetEnvironmentVariable("ASPNETCORE_HOSTINGSTARTUPASSEMBLIES")?.Contains("IIS") ?? false;
 
 
@@ -32,9 +51,14 @@ namespace MvcApp
             builder.Services.AddSingleton(new ConnectionOptions
             {
                 ConnectionString = connectionString,
-                IsLocal = useLocalApi,
+                IsLocal = useLocalDb,
                 IsIISExpress = isIISExpress
             });
+
+            builder.Services.AddDataAccessServices();
+            builder.Services.AddBusinessLogicServices();
+            builder.Services.AddRepositoryServices();
+            builder.Services.AddMVCAppServices();
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
@@ -51,9 +75,7 @@ namespace MvcApp
 
             builder.Services.AddAuthorization();
 
-            builder.Services.AddRepository();
-            builder.Services.AddScoped<AccountService>();
-
+            builder.Services.AddMvc();
 
             var app = builder.Build();
 

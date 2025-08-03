@@ -7,18 +7,8 @@ using System.Threading.Tasks;
 
 namespace Repository.Services
 {
-    internal class RepositoryBase
+    internal class RepositoryBase(ConnectionOptions connectionOptions)
     {
-        protected readonly HttpClient _httpClient;
-        protected readonly string _baseUrl;
-
-        public RepositoryBase(ConnectionOptions connectionOptions)
-        {
-            _baseUrl = connectionOptions.ConnectionString;
-            _httpClient = new HttpClient
-            {
-                BaseAddress = new Uri(_baseUrl)
-            };
-        }
+        protected readonly string _baseUrl = connectionOptions.ConnectionString;
     }
 }
