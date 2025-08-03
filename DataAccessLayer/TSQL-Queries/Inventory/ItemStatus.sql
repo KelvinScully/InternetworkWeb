@@ -101,7 +101,7 @@ BEGIN
 	IF EXISTS (
 		SELECT *
 		FROM	[Inventory].[ItemStatus]
-		WHERE	[ItemSectionId] <> @ItemStatusId
+		WHERE	[ItemStatusId] <> @ItemStatusId
 			AND TRIM(LOWER(ItemStatusName)) = TRIM(LOWER(@ItemStatusName))
 	)
 	BEGIN
@@ -134,3 +134,4 @@ BEGIN
 	WHERE	ItemStatusId = @ItemStatusId
 
 END;
+-- =============================================

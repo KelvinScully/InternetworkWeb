@@ -23,13 +23,13 @@ namespace MvcApp
 
             // Access config settings
             var config = builder.Configuration;
-            var connectionSection = config.GetSection("ApiSettings");
+            var connectionSection = config.GetSection("DbSettings");
 
             // Pull UseLocalApi toggle
-            bool useLocalApi = connectionSection.GetValue<bool>("UseLocalApi");
+            bool useLocalDb = connectionSection.GetValue<bool>("UseLocalDb");
 
             // Pull correct connection string
-            string connectionString = useLocalApi ? connectionSection.GetValue<string>("LocalApi") : connectionSection.GetValue<string>("PublishedApi");
+            string connectionString = useLocalDb ? connectionSection.GetValue<string>("LocalDb") : connectionSection.GetValue<string>("PublishedDb");
             bool isIISExpress = Environment.GetEnvironmentVariable("ASPNETCORE_HOSTINGSTARTUPASSEMBLIES")?.Contains("IIS") ?? false;
 
 
@@ -40,7 +40,7 @@ namespace MvcApp
             builder.Services.AddSingleton(new ConnectionOptions
             {
                 ConnectionString = connectionString,
-                IsLocal = useLocalApi,
+                IsLocal = useLocalDb,
                 IsIISExpress = isIISExpress
             });
 
