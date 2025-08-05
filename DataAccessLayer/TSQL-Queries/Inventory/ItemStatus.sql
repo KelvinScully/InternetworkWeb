@@ -10,7 +10,7 @@ CREATE TABLE [Inventory].[ItemStatus] (
 	[ItemStatusName] [VARCHAR](128) NOT NULL,
 
 	[IsActive] [BIT] NOT NULL,
-	[CreatedDataTime] [DATETIME2](7) NOT NULL
+	[CreatedDateTime] [DATETIME2](7) NOT NULL
 	CONSTRAINT [PK_InvItemStatus] PRIMARY KEY CLUSTERED (
 		ItemStatusId ASC
 	)
@@ -25,7 +25,8 @@ GO;
 -- =============================================
 
 CREATE OR ALTER PROCEDURE [Inventory].[SpItemStatusGet]
-	@ItemStatusId	INT
+	@ItemStatusId	INT,
+	@IsActive		BIT = 1
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -35,7 +36,8 @@ BEGIN
 		ItemStatusName,
 		IsActive
 	FROM	[Inventory].[ItemStatus]
-	WHERE	@ItemStatusId IS NULL OR @ItemStatusId = 0 OR ItemStatusId = @ItemStatusId
+	WHERE	(@ItemStatusId IS NULL OR @ItemStatusId = 0 OR ItemStatusId = @ItemStatusId)
+		AND IsActive = @IsActive
 END;
 
 -- =============================================
@@ -70,7 +72,7 @@ BEGIN
 		[ItemStatusName],
 
 		[IsActive],
-		[CreatedDataTime]
+		[CreatedDateTime]
 	)
 	VALUES (
 		@ItemStatusId,
