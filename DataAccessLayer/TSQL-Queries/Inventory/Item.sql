@@ -15,7 +15,7 @@ CREATE TABLE [Inventory].[Item] (
 	[StatusId] [INT] NOT NULL,
 
 	[IsActive] [BIT] NOT NULL,
-	[CreatedDataTime] [DATETIME2](7) NOT NULL
+	[CreatedDateTime] [DATETIME2](7) NOT NULL
 	CONSTRAINT [PK_InvItem] PRIMARY KEY CLUSTERED (
 		ItemId ASC
 	)
@@ -135,7 +135,7 @@ BEGIN
 		[StatusId],
 
 		[IsActive],
-		[CreatedDataTime]
+		[CreatedDateTime]
 	)
 	VALUES (
 		@ItemId,

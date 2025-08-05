@@ -10,7 +10,7 @@ CREATE TABLE [Inventory].[ItemCategory] (
 	[ItemCategoryName] [VARCHAR](128) NOT NULL,
 
 	[IsActive] [BIT] NOT NULL,
-	[CreatedDataTime] [DATETIME2](7) NOT NULL
+	[CreatedDateTime] [DATETIME2](7) NOT NULL
 	CONSTRAINT [PK_InvItemCategory] PRIMARY KEY CLUSTERED (
 		ItemCategoryId ASC
 	)
@@ -72,7 +72,7 @@ BEGIN
 		[ItemCategoryName],
 
 		[IsActive],
-		[CreatedDataTime]
+		[CreatedDateTime]
 	)
 	VALUES (
 		@ItemCategoryId,

@@ -10,7 +10,7 @@ CREATE TABLE [Inventory].[ItemStatus] (
 	[ItemStatusName] [VARCHAR](128) NOT NULL,
 
 	[IsActive] [BIT] NOT NULL,
-	[CreatedDataTime] [DATETIME2](7) NOT NULL
+	[CreatedDateTime] [DATETIME2](7) NOT NULL
 	CONSTRAINT [PK_InvItemStatus] PRIMARY KEY CLUSTERED (
 		ItemStatusId ASC
 	)
@@ -72,7 +72,7 @@ BEGIN
 		[ItemStatusName],
 
 		[IsActive],
-		[CreatedDataTime]
+		[CreatedDateTime]
 	)
 	VALUES (
 		@ItemStatusId,

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="TSQL-Queries\Inventory\" />
+    <Folder Include="TSQL-Queries\Account\" />
   </ItemGroup>
 
 </Project>
