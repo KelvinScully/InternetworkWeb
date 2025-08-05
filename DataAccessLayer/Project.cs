@@ -9,6 +9,7 @@ namespace DataAccessLayer
         public static IServiceCollection AddDataAccessServices(this IServiceCollection services)
         {
             //services.AddScoped<Interface, Implementation>();
+            services.AddScoped<IAccountDalService, AccountDalService>();
             services.AddScoped<IInventoryDalService, InventoryDalService>();
             return services;
         }

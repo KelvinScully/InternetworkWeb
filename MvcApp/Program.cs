@@ -21,6 +21,7 @@ namespace MvcApp
             services.AddSingleton(mapper);
 
             //services.AddScoped<Interface, Implementation>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IInventoryService, InventoryService>();
             return services;
         }
