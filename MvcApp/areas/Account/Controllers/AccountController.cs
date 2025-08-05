@@ -1,19 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
 using MvcApp.areas.Account.Model;
 using MvcApp.Services;
-using System.Net.NetworkInformation;
-using System.Security.Claims;
 using System.Text.Json;
 
 namespace MvcApp.Areas.Account.Controllers
 {
     [Area("Account")]
     [Route("Account")]
-    public class AccountController(AccountService accountService) : Controller
+    public class AccountController(IAccountService service) : Controller
     {
-        public AccountService _AccountService = accountService;
+        public IAccountService _Service = service;
 
         // =======================
         // Page Routes (Views)
@@ -60,7 +57,7 @@ namespace MvcApp.Areas.Account.Controllers
             if (model == null || model.IsNullOrEmptyForLogin()) return RedirectToAction("Gate");
 
 
-            var user = await _AccountService.Authenticate(model);
+            var user = await _Service.Authenticate(model);
 
             if (user.IsDefault())
             {
@@ -93,7 +90,7 @@ namespace MvcApp.Areas.Account.Controllers
                 return RedirectToAction("Gate");
 
 
-            var user = await _AccountService.Register(model);
+            var user = await _Service.Register(model);
 
             if (user.IsDefault())
             {

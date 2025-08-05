@@ -9,6 +9,7 @@ namespace Repository
         public static IServiceCollection AddRepositoryServices(this IServiceCollection services)
         {
             //services.AddScoped<Interface, Implementation>();
+            services.AddScoped<IAccountRepoService, AccountRepoService>();
             services.AddScoped<IInventoryRepoService, InventoryRepoServices>();
             return services;
         }
