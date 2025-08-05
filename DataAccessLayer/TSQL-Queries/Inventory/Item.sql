@@ -58,7 +58,7 @@ BEGIN
 
 		LEFT JOIN	[Inventory].[ItemStatus]	STAT
 				ON	STAT.StatusId = ITEM.StatusId
-	WHERE	(@ItemId IS NULL OR @ItemId = 0 OR ItemId = @ItemId)
+	WHERE	(@ItemId IS NULL OR @ItemId = 0 OR ITEM.ItemId = @ItemId)
 		AND IsActive = @IsActive
 
 END;
