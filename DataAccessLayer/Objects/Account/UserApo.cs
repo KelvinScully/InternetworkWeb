@@ -14,5 +14,11 @@
         public bool IsEmailVerified { get; set; }
         public bool IsActive { get; set; }
         public List<UserRoleApo> UserRoles { get; set; } = [];
+
+        public bool IsDefault()
+        {
+            if (UserId == 0 && string.IsNullOrEmpty(UserName) && string.IsNullOrEmpty(UserEmail)) { return true; }
+            return false;
+        }
     }
 }

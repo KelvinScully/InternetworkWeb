@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataAccessLayer.Objects.Inventory;
+using MvcApp.areas.Account.Model;
 using MvcApp.areas.Inventory.Models;
 
 namespace MvcApp.AutoMapper
@@ -14,6 +15,7 @@ namespace MvcApp.AutoMapper
 
             // CreateMap<From, To>();
             // One Way Maps
+            CreateMap<LoginRegisterModel, UserModel>();
         }
     }
 }
