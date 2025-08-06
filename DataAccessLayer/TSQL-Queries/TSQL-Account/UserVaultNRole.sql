@@ -24,7 +24,7 @@ GO;
 -- Description:	Store Procedure: Account User Vault N Role Get
 -- =============================================
 
-CREATE OR ALTER PROCEDURE [Account].[UserVaultNRoleGet]
+CREATE OR ALTER PROCEDURE [Account].[SpUserVaultNRoleGet]
 	@UserId		INT,
 	@UserRoleId	INT
 AS
@@ -32,7 +32,6 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		AccUSERNROLE.UserId,
 		AccUSERNROLE.UserRoleId,
 		AccROLE.UserRoleName
 	FROM	[Account].[UserVaultNRole]	AccUSERNROLE
@@ -52,7 +51,7 @@ GO;
 -- Description:	Store Procedure: Account User Vault N Role Insert
 -- =============================================
 
-CREATE OR ALTER PROCEDURE [Account].[UserVaultNRoleInsert]
+CREATE OR ALTER PROCEDURE [Account].[SpUserVaultNRoleInsert]
 	@UserId		INT,
 	@UserRoleId	INT
 AS
@@ -89,7 +88,7 @@ GO;
 -- Description:	Store Procedure: Account User Vault N Role Delete
 -- =============================================
 
-CREATE OR ALTER PROCEDURE [Account].[UserVaultNRoleDelete]
+CREATE OR ALTER PROCEDURE [Account].[SpUserVaultNRoleDelete]
 	@UserId		INT,
 	@UserRoleId	INT
 AS
