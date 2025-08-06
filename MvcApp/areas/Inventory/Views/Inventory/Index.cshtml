@@ -2,7 +2,30 @@
     ViewData["Title"] = "Inventory Landing";
 }
 
-<div class="text-center">
-    <h1>@ViewData["Title"]</h1>
-    <h2>Welcome to the Account area</h2>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-1 d-none d-md-block sidebar">
+            <!-- Your SidebarNav goes here -->
+            @await Html.PartialAsync("../Shared/SidebarNav.cshtml", "Index")
+        </nav>
+    <div class="col-xl-10 px-4">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6">
+                <h1 class="text-center">@ViewData["Title"]</h1>
+                <h2>Welcome to the Inventory area</h2>
+            </div>
+            <div class="col-3"></div>
+            @if (ViewData["Error"] != null && ViewData["Error"].ToString().Length > 0)
+            {
+                <h6 class="alert alert-danger" role="alert">@ViewData["Error"]</h6>
+            }
+        </div>
+        <!-- Content goes under here -->
+
+
+        <div class="col-1"></div>
+        </div>
+    </div>
 </div>
