@@ -1,0 +1,55 @@
+﻿@model string
+
+<div class="sidebar-sticky collapse d-xl-block text-left" id="sidebar">
+    <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Account" asp-controller="Account" asp-action="Index" role="button">
+        &ensp;Account
+    </a>
+    @if (Model.Contains("User"))
+    {
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Account" asp-controller="User" asp-action="Index" role="button">
+            @if (Model.Contains("Create") || Model.Contains("Edit"))
+            { <z>User</z> }
+            else
+            { <strong>User</strong> }
+        </a>
+
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Account" asp-controller="User" asp-action="Create" role="button">
+            &ensp;&ensp;
+            @if (Model.Contains("Create") || Model.Contains("Edit"))
+            { <strong>Add User</strong> }
+            else
+            { <z>Add User</z> }
+        </a>
+    }
+    else
+    {
+
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Account" asp-controller="Role" asp-action="Index" role="button">
+            &ensp;Category
+        </a>
+    }
+    @if (Model.Contains("Role"))
+    {
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Account" asp-controller="Role" asp-action="Index" role="button">
+            @if (Model.Contains("Create") || Model.Contains("Edit"))
+            { <z>Role</z> }
+            else
+            { <strong>Role</strong> }
+        </a>
+
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Account" asp-controller="Role" asp-action="Create" role="button">
+            &ensp;&ensp;
+            @if (Model.Contains("Create") || Model.Contains("Edit"))
+            { <strong>Add Role</strong> }
+            else
+            { <z>Add Role</z> }
+        </a>
+    }
+    else
+    {
+
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Account" asp-controller="Role" asp-action="Index" role="button">
+            &ensp;Role
+        </a>
+    }
+</div>
