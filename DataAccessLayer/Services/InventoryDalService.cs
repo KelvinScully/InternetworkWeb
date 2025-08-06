@@ -15,7 +15,8 @@ namespace DataAccessLayer.Services
         {
             SqlParameter[] parameters =
             [
-                new SqlParameter("@ItemId", 0)
+                new SqlParameter("@ItemId", 0),
+                new SqlParameter("@IsActive", 1)
             ];
 
             Dictionary<string, string> propertyMap = new()
@@ -59,7 +60,8 @@ namespace DataAccessLayer.Services
         {
             SqlParameter[] parameters =
             [
-                new SqlParameter("@ItemId", itemId)
+                new SqlParameter("@ItemId", itemId),
+                new SqlParameter("@IsActive", 1)
             ];
 
             Dictionary<string, string> propertyMap = new()
@@ -168,7 +170,8 @@ namespace DataAccessLayer.Services
         {
             SqlParameter[] parameters =
             [
-                new("@ItemId", itemId)
+                new("@ItemId", itemId),
+                new SqlParameter("@IsActive", 1)
             ];
 
             try
@@ -201,7 +204,8 @@ namespace DataAccessLayer.Services
         {
             SqlParameter[] parameters =
             [
-                new SqlParameter("@ItemCategoryId", 0)
+                new SqlParameter("@ItemCategoryId", 0),
+                new SqlParameter("@IsActive", 1)
             ];
 
             Dictionary<string, string> propertyMap = new()
@@ -236,7 +240,8 @@ namespace DataAccessLayer.Services
         {
             SqlParameter[] parameters =
             [
-                new SqlParameter("@ItemCategoryId", itemCategoryId)
+                new SqlParameter("@ItemCategoryId", itemCategoryId),
+                new SqlParameter("@IsActive", 1)
             ];
 
             Dictionary<string, string> propertyMap = new()
@@ -361,7 +366,8 @@ namespace DataAccessLayer.Services
         {
             SqlParameter[] parameters =
             [
-                new SqlParameter("@ItemLocationId", 0)
+                new SqlParameter("@ItemLocationId", 0),
+                new SqlParameter("@IsActive", 1)
             ];
 
             Dictionary<string, string> propertyMap = new()
@@ -396,7 +402,8 @@ namespace DataAccessLayer.Services
         {
             SqlParameter[] parameters =
             [
-                new SqlParameter("@ItemLocationId", itemLocationId)
+                new SqlParameter("@ItemLocationId", itemLocationId),
+                new SqlParameter("@IsActive", 1)
             ];
 
             Dictionary<string, string> propertyMap = new()
@@ -521,7 +528,8 @@ namespace DataAccessLayer.Services
         {
             SqlParameter[] parameters =
             [
-                new SqlParameter("@ItemStatusId", 0)
+                new SqlParameter("@ItemStatusId", 0),
+                new SqlParameter("@IsActive", 1)
             ];
 
             Dictionary<string, string> propertyMap = new()
@@ -556,7 +564,8 @@ namespace DataAccessLayer.Services
         {
             SqlParameter[] parameters =
             [
-                new SqlParameter("@ItemStatusId", itemStatusId)
+                new SqlParameter("@ItemStatusId", itemStatusId),
+                new SqlParameter("@IsActive", 1)
             ];
 
             Dictionary<string, string> propertyMap = new()

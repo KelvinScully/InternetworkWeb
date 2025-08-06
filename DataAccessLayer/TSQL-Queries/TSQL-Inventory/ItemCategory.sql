@@ -25,7 +25,7 @@ GO;
 -- =============================================
 
 CREATE OR ALTER PROCEDURE [Inventory].[SpItemCategoryGet]
-	@ItemCategoryId	INT,
+	@ItemCategoryId	INT = NULL,
 	@IsActive		BIT = 1
 AS
 BEGIN

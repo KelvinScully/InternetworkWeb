@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Common.Objects;
 using DataAccessLayer.Objects.Inventory;
-using MvcApp.areas.Inventory.Models;
+using MvcApp.Areas.Inventory.Models;
 using Repository.Interfaces;
 
 namespace MvcApp.Services

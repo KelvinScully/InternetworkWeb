@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using DataAccessLayer.Objects.Account;
 using DataAccessLayer.Objects.Inventory;
-using MvcApp.areas.Account.Model;
-using MvcApp.areas.Inventory.Models;
+using MvcApp.Areas.Account.Model;
+using MvcApp.Areas.Inventory.Models;
 
 namespace MvcApp.AutoMapper
 {

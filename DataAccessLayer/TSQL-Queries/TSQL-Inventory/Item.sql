@@ -30,7 +30,7 @@ GO;
 -- =============================================
 
 CREATE OR ALTER PROCEDURE [Inventory].[ItemGet]
-	@ItemId		INT,
+	@ItemId		INT = NULL,
 	@IsActive	BIT = 1
 AS
 BEGIN
@@ -51,15 +51,15 @@ BEGIN
 		ITEM.IsActive
 	FROM	[Inventory].[Item]	ITEM
 		LEFT JOIN	[Inventory].[ItemCategory]	CATE
-				ON	CATE.CategoryId = ITEM.CategoryId
+				ON	CATE.ItemCategoryId = ITEM.CategoryId
 
 		LEFT JOIN	[Inventory].[ItemLocation]	LOCA
-				ON	LOCA.LocationId = ITEM.LocationId
+				ON	LOCA.ItemLocationId = ITEM.LocationId
 
 		LEFT JOIN	[Inventory].[ItemStatus]	STAT
-				ON	STAT.StatusId = ITEM.StatusId
+				ON	STAT.ItemStatusId = ITEM.StatusId
 	WHERE	(@ItemId IS NULL OR @ItemId = 0 OR ITEM.ItemId = @ItemId)
-		AND IsActive = @IsActive
+		AND ITEM.IsActive = @IsActive
 
 END;
 

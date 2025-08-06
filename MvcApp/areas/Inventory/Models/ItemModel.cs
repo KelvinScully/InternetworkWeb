@@ -1,4 +1,4 @@
-﻿namespace MvcApp.areas.Inventory.Models
+﻿namespace MvcApp.Areas.Inventory.Models
 {
     public class ItemModel
     {

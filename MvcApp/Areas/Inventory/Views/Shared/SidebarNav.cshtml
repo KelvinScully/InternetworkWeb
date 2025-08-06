@@ -1,0 +1,28 @@
+﻿@model string
+
+<div class="sidebar-sticky collapse d-xl-block text-left" id="sidebar">
+    @if (Model.Contains("Status"))
+    {
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Status" asp-action="Index" role="button">
+            @if (Model.Contains("Create") || Model.Contains("Edit"))
+            { <z>Status</z> }
+            else
+            { <strong>Status</strong> }
+        </a>
+
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Status" asp-action="Create" role="button">
+            &ensp;&ensp;
+            @if (Model.Contains("Create") || Model.Contains("Edit"))
+            { <strong>Add Status</strong> }
+            else
+            { <z>Add Status</z> }
+        </a>
+    }
+    else
+    {
+
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Status" asp-action="Index" role="button">
+            &ensp;Status
+        </a>
+    }
+</div>
