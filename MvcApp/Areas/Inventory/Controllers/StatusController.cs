@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Objects.Inventory;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MvcApp.Areas.Inventory.Models;
 using MvcApp.Services;
 
@@ -14,10 +15,10 @@ namespace MvcApp.Areas.Inventory.Controllers
         // Page Routes (Views)
         // =======================
 
-        [HttpGet("[area]/[controller]")]
-        public async Task<IActionResult> Index()
+        [HttpGet("[area]/[controller]/{ShowInactive}")]
+        public async Task<IActionResult> Index(bool ShowInactive)
         {
-            var model = await _Service.GetItemStatus();
+            var model = await _Service.GetItemStatus(ShowInactive);
             return View(model);
         }
 

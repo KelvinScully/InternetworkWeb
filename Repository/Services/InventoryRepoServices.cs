@@ -13,7 +13,7 @@ namespace Repository.Services
 
         #region Item
 
-        public async Task<ApiResult<List<ItemApo>>> InventoryItemGet()
+        public async Task<ApiResult<List<ItemApo>>> InventoryItemGet(bool returnInactive)
         {
             try
             {
@@ -29,6 +29,9 @@ namespace Repository.Services
                 }
                 else
                 {
+                    if (!returnInactive)
+                        result.Value = result.Value.Where(obj => obj.IsActive).ToList();
+
                     return result;
                 }    
             }
@@ -169,7 +172,7 @@ namespace Repository.Services
 
         #region Item Category
 
-        public async Task<ApiResult<List<ItemCategoryApo>>> InventoryItemCategoryGet()
+        public async Task<ApiResult<List<ItemCategoryApo>>> InventoryItemCategoryGet(bool returnInactive)
         {
             try
             {
@@ -185,6 +188,9 @@ namespace Repository.Services
                 }
                 else
                 {
+                    if (!returnInactive)
+                        result.Value = result.Value.Where(obj => obj.IsActive).ToList();
+
                     return result;
                 }
             }
@@ -325,7 +331,7 @@ namespace Repository.Services
 
         #region Item Location
 
-        public async Task<ApiResult<List<ItemLocationApo>>> InventoryItemLocationGet()
+        public async Task<ApiResult<List<ItemLocationApo>>> InventoryItemLocationGet(bool returnInactive)
         {
             try
             {
@@ -341,6 +347,9 @@ namespace Repository.Services
                 }
                 else
                 {
+                    if (!returnInactive)
+                        result.Value = result.Value.Where(obj => obj.IsActive).ToList();
+
                     return result;
                 }
             }
@@ -481,7 +490,7 @@ namespace Repository.Services
 
         #region Item Status
 
-        public async Task<ApiResult<List<ItemStatusApo>>> InventoryItemStatusGet()
+        public async Task<ApiResult<List<ItemStatusApo>>> InventoryItemStatusGet(bool returnInactive)
         {
             try
             {
@@ -497,6 +506,9 @@ namespace Repository.Services
                 }
                 else
                 {
+                    if (!returnInactive)
+                        result.Value = result.Value.Where(obj => obj.IsActive).ToList();
+
                     return result;
                 }
             }
