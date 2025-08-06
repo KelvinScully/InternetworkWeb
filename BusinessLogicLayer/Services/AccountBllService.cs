@@ -11,6 +11,7 @@ namespace BusinessLogicLayer.Services
     {
         private readonly IAccountDalService _Dal = dal;
 
+        // User
         public async Task<ApiResult<List<UserApo>>> UserGet()
         {
             try
@@ -25,6 +26,11 @@ namespace BusinessLogicLayer.Services
                         Value = [],
                         Message = $"DAL Failed: {dalResult.Message}"
                     };
+                }
+
+                foreach (var user in dalResult.Value)
+                {
+                    user.UserRoles = (await _Dal.UserNUserRoleGet(user.UserId)).Value;
                 }
 
                 return new ApiResult<List<UserApo>>
@@ -69,6 +75,8 @@ namespace BusinessLogicLayer.Services
                         Message = $"DAL Failed: {dalResult.Message}"
                     };
                 }
+
+                dalResult.Value.UserRoles = (await _Dal.UserNUserRoleGet(dalResult.Value.UserId)).Value;
 
                 return new ApiResult<UserApo>
                 {
@@ -123,6 +131,159 @@ namespace BusinessLogicLayer.Services
             catch (Exception ex)
             {
                 return new ApiResult<UserApo>
+                {
+                    IsSuccessful = false,
+                    Value = new(),
+                    Message = $"Unhandled Exception: {ex.Message}"
+                };
+            }
+        }
+
+        public async Task<ApiResult<bool>> UserInsert(UserApo userApo)
+        {
+            try
+            {
+                var dalResult = await _Dal.UserInsert(userApo);
+
+                if (!dalResult.IsSuccessful)
+                {
+                    return new ApiResult<bool>
+                    {
+                        IsSuccessful = false,
+                        Value = new(),
+                        Message = $"DAL Failed: {dalResult.Message}"
+                    };
+                }
+
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = true,
+                    Value = dalResult.Value,
+                    Message = "Object Updated"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = new(),
+                    Message = $"Unhandled Exception: {ex.Message}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> UserUpdate(UserApo userApo)
+        {
+            try
+            {
+                var dalResult = await _Dal.UserUpdate(userApo);
+
+                if (!dalResult.IsSuccessful)
+                {
+                    return new ApiResult<bool>
+                    {
+                        IsSuccessful = false,
+                        Value = new(),
+                        Message = $"DAL Failed: {dalResult.Message}"
+                    };
+                }
+
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = true,
+                    Value = dalResult.Value,
+                    Message = "Object Updated"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = new(),
+                    Message = $"Unhandled Exception: {ex.Message}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> UserVerify(int userId)
+        {
+            if (userId == 0)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = "Id is equal to 0. Id must be a positive number"
+                };
+            }
+
+            try
+            {
+                var dalResult = await _Dal.UserVerify(userId);
+
+                if (!dalResult.IsSuccessful)
+                {
+                    return new ApiResult<bool>
+                    {
+                        IsSuccessful = false,
+                        Value = new(),
+                        Message = $"DAL Failed: {dalResult.Message}"
+                    };
+                }
+
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = true,
+                    Value = dalResult.Value,
+                    Message = "Object Verified"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = new(),
+                    Message = $"Unhandled Exception: {ex.Message}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> UserDelete(int userId)
+        {
+            if (userId == 0)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = "Id is equal to 0. Id must be a positive number"
+                };
+            }
+
+            try
+            {
+                var dalResult = await _Dal.UserDelete(userId);
+
+                if (!dalResult.IsSuccessful)
+                {
+                    return new ApiResult<bool>
+                    {
+                        IsSuccessful = false,
+                        Value = new(),
+                        Message = $"DAL Failed: {dalResult.Message}"
+                    };
+                }
+
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = true,
+                    Value = dalResult.Value,
+                    Message = "Object Deleted"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
                 {
                     IsSuccessful = false,
                     Value = new(),
@@ -262,11 +423,88 @@ namespace BusinessLogicLayer.Services
             }
         }
 
-        public async Task<ApiResult<bool>> UserInsert(UserApo userApo)
+        // User Role
+        public async Task<ApiResult<List<UserRoleApo>>> UserRoleGet()
         {
             try
             {
-                var dalResult = await _Dal.UserInsert(userApo);
+                var dalResult = await _Dal.UserRoleGet();
+
+                if (!dalResult.IsSuccessful || dalResult.Value is null)
+                {
+                    return new ApiResult<List<UserRoleApo>>
+                    {
+                        IsSuccessful = false,
+                        Value = [],
+                        Message = $"DAL Failed: {dalResult.Message}"
+                    };
+                }
+
+                return new ApiResult<List<UserRoleApo>>
+                {
+                    IsSuccessful = true,
+                    Value = dalResult.Value,
+                    Message = "Objects Found"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<List<UserRoleApo>>
+                {
+                    IsSuccessful = false,
+                    Value = [],
+                    Message = $"Unhandled Exception: {ex.Message}"
+                };
+            }
+        }
+        public async Task<ApiResult<UserRoleApo>> UserRoleGet(int userRoleId)
+        {
+            if (userRoleId == 0)
+            {
+                return new ApiResult<UserRoleApo>
+                {
+                    IsSuccessful = false,
+                    Value = new(),
+                    Message = "Id is equal to 0. Id must be a positive number"
+                };
+            }
+
+            try
+            {
+                var dalResult = await _Dal.UserRoleGet(userRoleId);
+
+                if (!dalResult.IsSuccessful || dalResult.Value is null)
+                {
+                    return new ApiResult<UserRoleApo>
+                    {
+                        IsSuccessful = false,
+                        Value = new(),
+                        Message = $"DAL Failed: {dalResult.Message}"
+                    };
+                }
+
+                return new ApiResult<UserRoleApo>
+                {
+                    IsSuccessful = true,
+                    Value = dalResult.Value,
+                    Message = "Object Found"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<UserRoleApo>
+                {
+                    IsSuccessful = false,
+                    Value = new(),
+                    Message = $"Unhandled Exception: {ex.Message}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> UserRoleInsert(UserRoleApo userRoleApo)
+        {
+            try
+            {
+                var dalResult = await _Dal.UserRoleInsert(userRoleApo);
 
                 if (!dalResult.IsSuccessful)
                 {
@@ -295,11 +533,11 @@ namespace BusinessLogicLayer.Services
                 };
             }
         }
-        public async Task<ApiResult<bool>> UserUpdate(UserApo userApo)
+        public async Task<ApiResult<bool>> UserRoleUpdate(UserRoleApo userRoleApo)
         {
             try
             {
-                var dalResult = await _Dal.UserUpdate(userApo);
+                var dalResult = await _Dal.UserRoleUpdate(userRoleApo);
 
                 if (!dalResult.IsSuccessful)
                 {
@@ -328,9 +566,9 @@ namespace BusinessLogicLayer.Services
                 };
             }
         }
-        public async Task<ApiResult<bool>> UserVerify(int userId)
+        public async Task<ApiResult<bool>> UserRoleDelete(int userRoleId)
         {
-            if (userId == 0)
+            if (userRoleId == 0)
             {
                 return new ApiResult<bool>
                 {
@@ -342,7 +580,7 @@ namespace BusinessLogicLayer.Services
 
             try
             {
-                var dalResult = await _Dal.UserVerify(userId);
+                var dalResult = await _Dal.UserRoleDelete(userRoleId);
 
                 if (!dalResult.IsSuccessful)
                 {
@@ -358,7 +596,7 @@ namespace BusinessLogicLayer.Services
                 {
                     IsSuccessful = true,
                     Value = dalResult.Value,
-                    Message = "Object Verified"
+                    Message = "Object Deleted"
                 };
             }
             catch (Exception ex)
@@ -371,21 +609,65 @@ namespace BusinessLogicLayer.Services
                 };
             }
         }
-        public async Task<ApiResult<bool>> UserDelete(int userId)
+
+        // User N User Role
+        public async Task<ApiResult<bool>> UserNUserRoleInsert(int userId, int userRoleId)
         {
-            if (userId == 0)
+            if (userId == 0 || userRoleId == 0)
             {
                 return new ApiResult<bool>
                 {
                     IsSuccessful = false,
                     Value = false,
-                    Message = "Id is equal to 0. Id must be a positive number"
+                    Message = "An Id is equal to 0. Id must be a positive number"
+                };
+            }
+            try
+            {
+                var dalResult = await _Dal.UserNUserRoleInsert(userId, userRoleId);
+
+                if (!dalResult.IsSuccessful)
+                {
+                    return new ApiResult<bool>
+                    {
+                        IsSuccessful = false,
+                        Value = new(),
+                        Message = $"DAL Failed: {dalResult.Message}"
+                    };
+                }
+
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = true,
+                    Value = dalResult.Value,
+                    Message = "Object Updated"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = new(),
+                    Message = $"Unhandled Exception: {ex.Message}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> UserNUserRoleDelete(int userId, int userRoleId)
+        {
+            if (userId == 0 || userRoleId == 0)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = "An Id is equal to 0. Id must be a positive number"
                 };
             }
 
             try
             {
-                var dalResult = await _Dal.UserDelete(userId);
+                var dalResult = await _Dal.UserNUserRoleDelete(userId, userRoleId);
 
                 if (!dalResult.IsSuccessful)
                 {

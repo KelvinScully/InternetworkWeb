@@ -24,7 +24,7 @@ GO;
 -- Description:	Store Procedure: Account User Role Get
 -- =============================================
 
-CREATE OR ALTER PROCEDURE [Account].[UserRoleGet]
+CREATE OR ALTER PROCEDURE [Account].[SpUserRoleGet]
 	@UserRoleId		INT
 AS
 BEGIN
@@ -46,7 +46,7 @@ GO;
 -- Description:	Store Procedure: Account User Role Insert
 -- =============================================
 
-CREATE OR ALTER PROCEDURE [Account].[UserRoleInsert]
+CREATE OR ALTER PROCEDURE [Account].[SpUserRoleInsert]
 
 	@UserRoleName VARCHAR(128)
 AS
@@ -91,7 +91,7 @@ GO;
 -- Description:	Store Procedure: Account User Role Update
 -- =============================================
 
-CREATE OR ALTER PROCEDURE [Account].[UserRoleUpdate]
+CREATE OR ALTER PROCEDURE [Account].[SpUserRoleUpdate]
 	@UserRoleId		INT,
 	@UserRoleName	VARCHAR(128)
 AS
@@ -123,7 +123,7 @@ GO;
 -- Description:	Store Procedure: Account User Role Delete (Soft Delete)
 -- =============================================
 
-CREATE OR ALTER PROCEDURE [Account].[UserRoleDelete]
+CREATE OR ALTER PROCEDURE [Account].[SpUserRoleDeleteSoft]
 	@UserRoleId	INT
 AS
 BEGIN
