@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="TSQL-Queries\Inventory\" />
+    <Folder Include="TSQL-Queries\TSQL-Inventory\" />
   </ItemGroup>
 
 </Project>

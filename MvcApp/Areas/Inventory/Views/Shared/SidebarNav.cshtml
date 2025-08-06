@@ -1,0 +1,79 @@
+﻿@model string
+
+<div class="sidebar-sticky collapse d-xl-block text-left" id="sidebar">
+    <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Inventory" asp-action="Index" role="button">
+        &ensp;Inventory
+    </a>
+    @if (Model.Contains("Category"))
+    {
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Category" asp-action="Index" role="button">
+            @if (Model.Contains("Create") || Model.Contains("Edit"))
+            { <z>Category</z> }
+            else
+            { <strong>Category</strong> }
+        </a>
+
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Category" asp-action="Create" role="button">
+            &ensp;&ensp;
+            @if (Model.Contains("Create") || Model.Contains("Edit"))
+            { <strong>Add Category</strong> }
+            else
+            { <z>Add Category</z> }
+        </a>
+    }
+    else
+    {
+
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Category" asp-action="Index" role="button">
+            &ensp;Category
+        </a>
+    }
+    @if (Model.Contains("Location"))
+    {
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Location" asp-action="Index" role="button">
+            @if (Model.Contains("Create") || Model.Contains("Edit"))
+            { <z>Location</z> }
+            else
+            { <strong>Location</strong> }
+        </a>
+
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Location" asp-action="Create" role="button">
+            &ensp;&ensp;
+            @if (Model.Contains("Create") || Model.Contains("Edit"))
+            { <strong>Add Location</strong> }
+            else
+            { <z>Add Location</z> }
+        </a>
+    }
+    else
+    {
+
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Location" asp-action="Index" role="button">
+            &ensp;Location
+        </a>
+    }
+    @if (Model.Contains("Status"))
+    {
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Status" asp-action="Index" role="button">
+            @if (Model.Contains("Create") || Model.Contains("Edit"))
+            { <z>Status</z> }
+            else
+            { <strong>Status</strong> }
+        </a>
+
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Status" asp-action="Create" role="button">
+            &ensp;&ensp;
+            @if (Model.Contains("Create") || Model.Contains("Edit"))
+            { <strong>Add Status</strong> }
+            else
+            { <z>Add Status</z> }
+        </a>
+    }
+    else
+    {
+
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Status" asp-action="Index" role="button">
+            &ensp;Status
+        </a>
+    }
+</div>

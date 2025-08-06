@@ -25,7 +25,7 @@ GO;
 -- =============================================
 
 CREATE OR ALTER PROCEDURE [Account].[UserRoleGet]
-	@UserRoleId		INT,
+	@UserRoleId		INT = NULL,
 	@IsActive		BIT = 1
 AS
 BEGIN

@@ -25,7 +25,7 @@ GO;
 -- =============================================
 
 CREATE OR ALTER PROCEDURE [Inventory].[SpItemLocationGet]
-	@ItemLocationId	INT,
+	@ItemLocationId	INT = NULL,
 	@IsActive		BIT = 1
 AS
 BEGIN
