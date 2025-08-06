@@ -5,6 +5,7 @@ namespace BusinessLogicLayer.Interfaces
 {
     public interface IAccountBllService
     {
+        // User
         Task<ApiResult<List<UserApo>>> UserGet();
         Task<ApiResult<UserApo>> UserGet(int userId);
         Task<ApiResult<UserApo>> UserGet(string userName);
@@ -15,5 +16,12 @@ namespace BusinessLogicLayer.Interfaces
 
         Task<ApiResult<UserApo>> Register(UserApo user);
         Task<ApiResult<UserApo>> Authenticate(UserApo user);
+
+        // User Role
+        Task<ApiResult<List<UserRoleApo>>> UserRoleGet();
+        Task<ApiResult<UserRoleApo>> UserRoleGet(int userRoleId);
+        Task<ApiResult<bool>> UserRoleInsert(UserRoleApo userRoleApo);
+        Task<ApiResult<bool>> UserRoleUpdate(UserRoleApo userRoleApo);
+        Task<ApiResult<bool>> UserRoleDelete(int userRoleId);
     }
 }

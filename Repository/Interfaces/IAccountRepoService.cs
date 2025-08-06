@@ -5,9 +5,10 @@ namespace Repository.Interfaces
 {
     public interface IAccountRepoService
     {
-        Task<ApiResult<List<UserApo>>> AccountGetUser(bool returnInactive);
-        Task<ApiResult<UserApo>> AccountGetUser(int userId);
-        Task<ApiResult<UserApo>> AccountGetUser(string userName);
+        // User
+        Task<ApiResult<List<UserApo>>> AccountUserGet(bool returnInactive);
+        Task<ApiResult<UserApo>> AccountUserGet(int userId);
+        Task<ApiResult<UserApo>> AccountUserGet(string userName);
         Task<ApiResult<bool>> AccountUserInsert(UserApo userApo);
         Task<ApiResult<bool>> AccountUserUpdate(UserApo userApo);
         Task<ApiResult<bool>> AccountUserVerify(int userId);
@@ -15,5 +16,12 @@ namespace Repository.Interfaces
 
         Task<ApiResult<UserApo>> Register(UserApo user);
         Task<ApiResult<UserApo>> Authenticate(UserApo user);
+
+        // User Role
+        Task<ApiResult<List<UserRoleApo>>> AccountUserRoleGet(bool returnInactive);
+        Task<ApiResult<UserRoleApo>> AccountUserRoleGet(int userRoleId);
+        Task<ApiResult<bool>> AccountUserRoleInsert(UserRoleApo userRoleApo);
+        Task<ApiResult<bool>> AccountUserRoleUpdate(UserRoleApo userRoleApo);
+        Task<ApiResult<bool>> AccountUserRoleDelete(int userRoleId);
     }
 }

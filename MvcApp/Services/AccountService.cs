@@ -4,7 +4,7 @@ using DataAccessLayer.Objects.Account;
 using DataAccessLayer.Objects.Inventory;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using MvcApp.Areas.Account.Model;
+using MvcApp.Areas.Account.Models;
 using MvcApp.Areas.Inventory.Models;
 using Repository.Interfaces;
 using System.Security.Claims;
@@ -13,6 +13,7 @@ namespace MvcApp.Services
 {
     public interface IAccountService
     {
+        // User
         Task<List<UserModel>> GetUser(bool returnInactive);
         Task<UserModel> GetUser(int userId);
         Task<UserModel> GetUser(string userName);
@@ -23,6 +24,13 @@ namespace MvcApp.Services
 
         Task<UserModel> Register(LoginRegisterModel user);
         Task<UserModel> Authenticate(LoginRegisterModel user);
+
+        // User Role
+        Task<List<UserRoleModel>> GetUserRole(bool returnInactive);
+        Task<UserRoleModel> GetUserRole(int userRoleId);
+        Task<ApiResult<bool>> InsertUserRole(UserRoleModel userRoleModel);
+        Task<ApiResult<bool>> UpdateUserRole(UserRoleModel userRoleModel);
+        Task<ApiResult<bool>> DeleteUserRole(int userRoleId);
     }
     public class AccountService(IAccountRepoService repo, IMapper mapper, IHttpContextAccessor httpContextAccessor) : IAccountService
     {
@@ -32,7 +40,7 @@ namespace MvcApp.Services
 
         public async Task<List<UserModel>> GetUser(bool returnInactive)
         {
-            var data = (await _Repo.AccountGetUser(returnInactive)).Value;
+            var data = (await _Repo.AccountUserGet(returnInactive)).Value;
             var result = _Mapper.Map<List<UserModel>>(data);
             foreach (var obj in result)
                 obj.ShowInactive = returnInactive;
@@ -40,13 +48,13 @@ namespace MvcApp.Services
         }
         public async Task<UserModel> GetUser(int userId)
         {
-            var data = (await _Repo.AccountGetUser(userId)).Value;
+            var data = (await _Repo.AccountUserGet(userId)).Value;
             var result = _Mapper.Map<UserModel>(data);
             return result;
         }
         public async Task<UserModel> GetUser(string userName)
         {
-            var data = (await _Repo.AccountGetUser(userName)).Value;
+            var data = (await _Repo.AccountUserGet(userName)).Value;
             var result = _Mapper.Map<UserModel>(data);
             return result;
         }
@@ -98,6 +106,41 @@ namespace MvcApp.Services
             return _Mapper.Map<UserModel>(authenticatedUser);
         }
 
+        // User Role
+        public async Task<List<UserRoleModel>> GetUserRole(bool returnInactive)
+        {
+            var data = (await _Repo.AccountUserRoleGet(returnInactive)).Value;
+            var result = _Mapper.Map<List<UserRoleModel>>(data);
+            foreach (var obj in result)
+                obj.ShowInactive = returnInactive;
+            return result;
+        }
+        public async Task<UserRoleModel> GetUserRole(int userRoleId)
+        {
+            var data = (await _Repo.AccountUserRoleGet(userRoleId)).Value;
+            var result = _Mapper.Map<UserRoleModel>(data);
+            return result;
+        }
+        public async Task<ApiResult<bool>> InsertUserRole(UserRoleModel userRoleModel)
+        {
+            var data = await _Repo.AccountUserRoleInsert(_Mapper.Map<UserRoleApo>(userRoleModel));
+            var result = data;
+            return result;
+        }
+        public async Task<ApiResult<bool>> UpdateUserRole(UserRoleModel userRoleModel)
+        {
+            var data = await _Repo.AccountUserRoleUpdate(_Mapper.Map<UserRoleApo>(userRoleModel));
+            var result = data;
+            return result;
+        }
+        public async Task<ApiResult<bool>> DeleteUserRole(int userRoleId)
+        {
+            var data = await _Repo.AccountUserRoleDelete(userRoleId);
+            var result = data;
+            return result;
+        }
+
+        // Service Methods
         private async Task SignInUserAsync(UserApo user, bool rememberMe)
         {
             var context = _httpContextAccessor.HttpContext!;

@@ -1,7 +1,7 @@
 ﻿using DataAccessLayer.Objects.Account;
 using System.Text.Json.Serialization;
 
-namespace MvcApp.Areas.Account.Model
+namespace MvcApp.Areas.Account.Models
 {
     public class UserModel
     {

@@ -12,7 +12,8 @@ namespace Repository.Services
     {
         private readonly IAccountBllService _Bll = bll;
 
-        public async Task<ApiResult<List<UserApo>>> AccountGetUser(bool returnInactive)
+        // User
+        public async Task<ApiResult<List<UserApo>>> AccountUserGet(bool returnInactive)
         {
             try
             {
@@ -44,7 +45,7 @@ namespace Repository.Services
                 };
             }
         }
-        public async Task<ApiResult<UserApo>> AccountGetUser(int userId)
+        public async Task<ApiResult<UserApo>> AccountUserGet(int userId)
         {
             try
             {
@@ -73,7 +74,7 @@ namespace Repository.Services
                 };
             }
         }
-        public async Task<ApiResult<UserApo>> AccountGetUser(string userName)
+        public async Task<ApiResult<UserApo>> AccountUserGet(string userName)
         {
             try
             {
@@ -267,6 +268,162 @@ namespace Repository.Services
                 {
                     IsSuccessful = false,
                     Value = new(),
+                    Message = $"Exception: {ex.Message}"
+                };
+            }
+        }
+
+        // User Role
+        public async Task<ApiResult<List<UserRoleApo>>> AccountUserRoleGet(bool returnInactive)
+        {
+            try
+            {
+                var result = await _Bll.UserRoleGet();
+                if (result == null || !result.IsSuccessful || result.Value == null || result.Value.Count == 0)
+                {
+                    return new ApiResult<List<UserRoleApo>>
+                    {
+                        IsSuccessful = false,
+                        Value = [],
+                        Message = "Empty result"
+                    };
+                }
+                else
+                {
+                    if (!returnInactive)
+                        result.Value = result.Value.Where(obj => obj.IsActive).ToList();
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<List<UserRoleApo>>
+                {
+                    IsSuccessful = false,
+                    Value = [],
+                    Message = $"Exception: {ex.Message}"
+                };
+            }
+        }
+        public async Task<ApiResult<UserRoleApo>> AccountUserRoleGet(int userRoleId)
+        {
+            try
+            {
+                var result = await _Bll.UserRoleGet(userRoleId);
+                if (result == null || !result.IsSuccessful || result.Value == null)
+                {
+                    return new ApiResult<UserRoleApo>
+                    {
+                        IsSuccessful = false,
+                        Value = new(),
+                        Message = "Empty result"
+                    };
+                }
+                else
+                {
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<UserRoleApo>
+                {
+                    IsSuccessful = false,
+                    Value = new(),
+                    Message = $"Exception: {ex.Message}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> AccountUserRoleInsert(UserRoleApo userRoleApo)
+        {
+            try
+            {
+                var result = await _Bll.UserRoleInsert(userRoleApo);
+                if (result.IsSuccessful)
+                {
+                    return new ApiResult<bool>
+                    {
+                        IsSuccessful = true,
+                        Value = result.IsSuccessful,
+                        Message = $"User Role Inserted"
+                    };
+                }
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = result.IsSuccessful,
+                    Message = $"User Role Insert Failed"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = $"Exception: {ex.Message}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> AccountUserRoleUpdate(UserRoleApo userRoleApo)
+        {
+            try
+            {
+                var result = await _Bll.UserRoleUpdate(userRoleApo);
+                if (result.IsSuccessful)
+                {
+                    return new ApiResult<bool>
+                    {
+                        IsSuccessful = true,
+                        Value = result.IsSuccessful,
+                        Message = $"User Role Updated"
+                    };
+                }
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = result.IsSuccessful,
+                    Message = $"User Role Update Failed"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = $"Exception: {ex.Message}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> AccountUserRoleDelete(int userRoleId)
+        {
+            try
+            {
+                var result = await _Bll.UserRoleDelete(userRoleId);
+                if (result.IsSuccessful)
+                {
+                    return new ApiResult<bool>
+                    {
+                        IsSuccessful = true,
+                        Value = result.IsSuccessful,
+                        Message = $"User Role Deleted"
+                    };
+                }
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = result.IsSuccessful,
+                    Message = $"User Role Delete Failed"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
                     Message = $"Exception: {ex.Message}"
                 };
             }

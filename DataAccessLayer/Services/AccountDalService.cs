@@ -10,6 +10,7 @@ namespace DataAccessLayer.Services
 {
     internal class AccountDalService(ConnectionOptions connectionOptions) : DataAccessService(connectionOptions), IAccountDalService
     {
+        // User
         public async Task<ApiResult<List<UserApo>>> UserGet()
         {
             SqlParameter[] parameters =
@@ -255,6 +256,165 @@ namespace DataAccessLayer.Services
             SqlParameter[] parameters =
             [
                 new("@UserId", userId)
+            ];
+
+            try
+            {
+                var isDBSuccessful = await DeleteSqlAsync("Account.SpUserVaultDelete", parameters);
+
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = true,
+                    Value = isDBSuccessful,
+                    Message = $"Object Deleted"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = $"Error in the Database: {ex}"
+                };
+            }
+        }
+
+        // User Role
+        public async Task<ApiResult<List<UserRoleApo>>> UserRoleGet()
+        {
+            SqlParameter[] parameters =
+            [
+                new("@UserRoleId", SqlDbType.Int) { Value = 0 }
+            ];
+
+            Dictionary<string, string> propertyMap = new()
+            {
+                // [C# Property] = DB Column
+                ["UserRoleId"] = "UserRoleId",
+                ["UserRoleName"] = "UserRoleName",
+                ["IsActive"] = "IsActive"
+            };
+
+            try
+            {
+                var userRoles = await GetSqlListAsync<UserRoleApo>("Account.SpUserRoleGet", parameters, propertyMap);
+
+                return new ApiResult<List<UserRoleApo>>
+                {
+                    IsSuccessful = true,
+                    Value = userRoles,
+                    Message = "Objects Found"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<List<UserRoleApo>>
+                {
+                    IsSuccessful = false,
+                    Value = [],
+                    Message = $"Error in the Database: {ex}"
+                };
+            }
+        }
+        public async Task<ApiResult<UserRoleApo>> UserRoleGet(int userRoleId)
+        {
+            SqlParameter[] parameters =
+            [
+                new("@UserRoleId", userRoleId)
+            ];
+
+            Dictionary<string, string> propertyMap = new()
+            {
+                // [C# Property] = DB Column
+                ["UserRoleId"] = "UserRoleId",
+                ["UserRoleName"] = "UserRoleName",
+                ["IsActive"] = "IsActive"
+            };
+
+            try
+            {
+                var userRole = await GetSqlSingleAsync<UserRoleApo>("Account.SpUserRoleGet", parameters, propertyMap);
+
+                return new ApiResult<UserRoleApo>
+                {
+                    IsSuccessful = true,
+                    Value = userRole,
+                    Message = "Object Found"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<UserRoleApo>
+                {
+                    IsSuccessful = false,
+                    Value = new(),
+                    Message = $"Error in the Database: {ex}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> UserRoleInsert(UserRoleApo userRoleApo)
+        {
+            SqlParameter[] parameters =
+            [
+                new("@UserRoleName", userRoleApo.UserRoleName)
+            ];
+
+            try
+            {
+                var isDBSuccessful = await InsertSqlAsync("Account.SpUserRoleInsert", parameters);
+
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = true,
+                    Value = isDBSuccessful,
+                    Message = $"Object Inserted"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = $"Error in the Database: {ex}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> UserRoleUpdate(UserRoleApo userRoleApo)
+        {
+            SqlParameter[] parameters =
+            [
+                new("@UserRoleId", userRoleApo.UserRoleId),
+                new("@UserRoleName", userRoleApo.UserRoleName)
+            ];
+
+            try
+            {
+                var isDBSuccessful = await UpdateSqlAsync("Account.SpUserRoleUpdate", parameters);
+
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = true,
+                    Value = isDBSuccessful,
+                    Message = $"Object Update"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = $"Error in the Database: {ex}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> UserRoleDelete(int userRoleId)
+        {
+            SqlParameter[] parameters =
+            [
+                new("@UserRoleId", userRoleId)
             ];
 
             try
