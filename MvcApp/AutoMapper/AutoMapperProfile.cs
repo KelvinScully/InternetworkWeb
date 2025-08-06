@@ -12,6 +12,9 @@ namespace MvcApp.AutoMapper
         {
             // CreateMap<object, object>().ReverseMap();
             // Two Way Maps
+            CreateMap<ItemModel, ItemApo>().ReverseMap();
+            CreateMap<ItemCategoryModel, ItemCategoryApo>().ReverseMap();
+            CreateMap<ItemLocationModel, ItemLocationApo>().ReverseMap();
             CreateMap<ItemStatusModel, ItemStatusApo>().ReverseMap();
             CreateMap<UserModel, UserApo>().ReverseMap();
 
