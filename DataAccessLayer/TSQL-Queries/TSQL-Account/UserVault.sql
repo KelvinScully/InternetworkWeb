@@ -30,7 +30,7 @@ GO;
 -- =============================================
 
 CREATE OR ALTER PROCEDURE [Account].[SpUserVaultGetById]
-	@UserId		INT,
+	@UserId		INT = NULL,
 	@IsActive	BIT = 1
 AS
 BEGIN
@@ -58,7 +58,7 @@ GO;
 
 CREATE OR ALTER PROCEDURE [Account].[SpUserVaultGetByUserName]
 	@UserName	VARCHAR(128),
-	@IsActive	BIT = 1
+	@IsActive	BIT
 AS
 BEGIN
 	SET NOCOUNT ON;

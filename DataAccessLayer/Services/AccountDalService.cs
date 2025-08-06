@@ -13,7 +13,8 @@ namespace DataAccessLayer.Services
         {
             SqlParameter[] parameters =
             [
-                new("@UserId", 0)
+                new("@UserId", 0),
+                new("@IsActive", 1)
             ];
 
             Dictionary<string, string> propertyMap = new()
@@ -51,7 +52,8 @@ namespace DataAccessLayer.Services
         {
             SqlParameter[] parameters =
             [
-                new("@UserId", userId)
+                new("@UserId", userId),
+                new("@IsActive", 1)
             ];
 
             Dictionary<string, string> propertyMap = new()
@@ -89,7 +91,8 @@ namespace DataAccessLayer.Services
         {
             SqlParameter[] parameters =
             [
-                new("@UserName", userName)
+                new("@UserName", userName),
+                new("@IsActive", 1)
             ];
 
             Dictionary<string, string> propertyMap = new()

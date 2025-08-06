@@ -21,8 +21,7 @@ namespace MvcApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var items = await _Service.GetitemStatus(1);
-            return View(items);
+            return View();
         }
 
         public IActionResult Privacy()
