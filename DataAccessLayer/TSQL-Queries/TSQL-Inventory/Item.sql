@@ -29,7 +29,7 @@ GO;
 -- Description:	Store Procedure: Inventory Item Get
 -- =============================================
 
-CREATE OR ALTER PROCEDURE [Inventory].[ItemGet]
+CREATE OR ALTER PROCEDURE [Inventory].[SpItemGet]
 	@ItemId		INT
 AS
 BEGIN
