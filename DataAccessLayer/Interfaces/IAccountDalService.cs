@@ -21,5 +21,11 @@ namespace DataAccessLayer.Interfaces
         Task<ApiResult<bool>> UserRoleInsert(UserRoleApo userRoleApo);
         Task<ApiResult<bool>> UserRoleUpdate(UserRoleApo userRoleApo);
         Task<ApiResult<bool>> UserRoleDelete(int userRoleId);
+
+        // User N User Role
+        Task<ApiResult<List<UserRoleApo>>> UserNUserRoleGet(int userId);
+        Task<ApiResult<List<UserRoleApo>>> UserNUserRoleGet(int userId, int userRoleId);
+        Task<ApiResult<bool>> UserNUserRoleInsert(int userId, int UserRoleId);
+        Task<ApiResult<bool>> UserNUserRoleDelete(int userId, int UserRoleId);
     }
 }

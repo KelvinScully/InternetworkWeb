@@ -23,5 +23,9 @@ namespace Repository.Interfaces
         Task<ApiResult<bool>> AccountUserRoleInsert(UserRoleApo userRoleApo);
         Task<ApiResult<bool>> AccountUserRoleUpdate(UserRoleApo userRoleApo);
         Task<ApiResult<bool>> AccountUserRoleDelete(int userRoleId);
+
+        // User N User Role
+        Task<ApiResult<bool>> AccountUserNUserRoleInsert(int userId, int userRoleId);
+        Task<ApiResult<bool>> AccountUserNUserRoleDelete(int userId, int userRoleId);
     }
 }

@@ -428,5 +428,69 @@ namespace Repository.Services
                 };
             }
         }
+
+        // User N User Role
+        public async Task<ApiResult<bool>> AccountUserNUserRoleInsert(int userId, int userRoleId)
+        {
+            try
+            {
+                var result = await _Bll.UserNUserRoleInsert(userId, userRoleId);
+                if (result.IsSuccessful)
+                {
+                    return new ApiResult<bool>
+                    {
+                        IsSuccessful = true,
+                        Value = result.IsSuccessful,
+                        Message = $"User N User Role Inserted"
+                    };
+                }
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = result.IsSuccessful,
+                    Message = $"User N User Role Insert Failed"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = $"Exception: {ex.Message}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> AccountUserNUserRoleDelete(int userId, int userRoleId)
+        {
+            try
+            {
+                var result = await _Bll.UserNUserRoleDelete(userId, userRoleId);
+                if (result.IsSuccessful)
+                {
+                    return new ApiResult<bool>
+                    {
+                        IsSuccessful = true,
+                        Value = result.IsSuccessful,
+                        Message = $"User N User Role Deleted"
+                    };
+                }
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = result.IsSuccessful,
+                    Message = $"User N User Role Delete Failed"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = $"Exception: {ex.Message}"
+                };
+            }
+        }
     }
 }

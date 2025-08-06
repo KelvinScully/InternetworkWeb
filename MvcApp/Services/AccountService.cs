@@ -31,6 +31,10 @@ namespace MvcApp.Services
         Task<ApiResult<bool>> InsertUserRole(UserRoleModel userRoleModel);
         Task<ApiResult<bool>> UpdateUserRole(UserRoleModel userRoleModel);
         Task<ApiResult<bool>> DeleteUserRole(int userRoleId);
+
+        // User N User Role
+        Task<ApiResult<bool>> InsertUserNUserRole(int userId, int userRoleId);
+        Task<ApiResult<bool>> DeleteUserNUserRole(int userId, int userRoleId);
     }
     public class AccountService(IAccountRepoService repo, IMapper mapper, IHttpContextAccessor httpContextAccessor) : IAccountService
     {
@@ -136,6 +140,20 @@ namespace MvcApp.Services
         public async Task<ApiResult<bool>> DeleteUserRole(int userRoleId)
         {
             var data = await _Repo.AccountUserRoleDelete(userRoleId);
+            var result = data;
+            return result;
+        }
+
+        // User N User Role
+        public async Task<ApiResult<bool>> InsertUserNUserRole(int userId, int userRoleId)
+        {
+            var data = await _Repo.AccountUserNUserRoleInsert(userId, userRoleId);
+            var result = data;
+            return result;
+        }
+        public async Task<ApiResult<bool>> DeleteUserNUserRole(int userId, int userRoleId)
+        {
+            var data = await _Repo.AccountUserNUserRoleDelete(userId, userRoleId);
             var result = data;
             return result;
         }

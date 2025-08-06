@@ -438,5 +438,137 @@ namespace DataAccessLayer.Services
                 };
             }
         }
+
+        // User N User Role
+        public async Task<ApiResult<List<UserRoleApo>>> UserNUserRoleGet(int userId)
+        {
+            SqlParameter[] parameters =
+            [
+                new("@UserRoleId", userId),
+                new("@UserId", SqlDbType.Int) { Value = 0 }
+            ];
+
+            Dictionary<string, string> propertyMap = new()
+            {
+                // [C# Property] = DB Column
+                ["UserRoleId"] = "UserRoleId",
+                ["UserRoleName"] = "UserRoleName"
+            };
+
+            try
+            {
+                var users = await GetSqlListAsync<UserRoleApo>("Account.SpUserVaultNRoleGet", parameters, propertyMap);
+
+                return new ApiResult<List<UserRoleApo>>()
+                {
+                    IsSuccessful = true,
+                    Value = users,
+                    Message = "Object Found"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<List<UserRoleApo>>
+                {
+                    IsSuccessful = false,
+                    Value = [],
+                    Message = $"Error in the Database: {ex}"
+                };
+            }
+        }
+        public async Task<ApiResult<List<UserRoleApo>>> UserNUserRoleGet(int userId, int userRoleId)
+        {
+            SqlParameter[] parameters =
+            [
+                new("@UserId", userId),
+                new("@UserRoleId", userRoleId)
+            ];
+
+            Dictionary<string, string> propertyMap = new()
+            {
+                // [C# Property] = DB Column
+                ["UserRoleId"] = "UserRoleId",
+                ["UserRoleName"] = "UserRoleName"
+            };
+
+            try
+            {
+                var users = await GetSqlListAsync<UserRoleApo>("Account.SpUserVaultNRoleGet", parameters, propertyMap);
+
+                return new ApiResult<List<UserRoleApo>>()
+                {
+                    IsSuccessful = true,
+                    Value = users,
+                    Message = "Object Found"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<List<UserRoleApo>>
+                {
+                    IsSuccessful = false,
+                    Value = [],
+                    Message = $"Error in the Database: {ex}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> UserNUserRoleInsert(int userId, int UserRoleId)
+        {
+            SqlParameter[] parameters =
+            [
+                new("@UserId", userId),
+                new("@UserRoleId", UserRoleId)
+            ];
+
+            try
+            {
+                var isDBSuccessful = await DeleteSqlAsync("Account.SpUserVaultNRoleGet", parameters);
+
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = true,
+                    Value = isDBSuccessful,
+                    Message = $"Object Inserted"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = $"Error in the Database: {ex}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> UserNUserRoleDelete(int userId, int UserRoleId)
+        {
+            SqlParameter[] parameters =
+            [
+                new("@UserId", userId),
+                new("@UserRoleId", UserRoleId)
+            ];
+
+            try
+            {
+                var isDBSuccessful = await DeleteSqlAsync("Account.SpUserVaultNRoleDelete", parameters);
+
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = true,
+                    Value = isDBSuccessful,
+                    Message = $"Object Deleted"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = $"Error in the Database: {ex}"
+                };
+            }
+        }
     }
 }

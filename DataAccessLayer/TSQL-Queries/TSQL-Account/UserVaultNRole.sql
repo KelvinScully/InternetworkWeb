@@ -32,7 +32,6 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		AccUSERNROLE.UserId,
 		AccUSERNROLE.UserRoleId,
 		AccROLE.UserRoleName
 	FROM	[Account].[UserVaultNRole]	AccUSERNROLE
