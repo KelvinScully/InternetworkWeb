@@ -108,6 +108,7 @@ namespace MvcApp.Areas.Account.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost("Logout")]
         public async Task<IActionResult> Logout()
         {
             await _Service.SignOutUserAsync();
