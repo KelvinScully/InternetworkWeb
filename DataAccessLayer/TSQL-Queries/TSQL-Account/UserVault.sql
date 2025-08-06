@@ -41,7 +41,7 @@ BEGIN
 		UserEmail,
 
 		IsEmailVerified,
-		CreatedDateTime
+		IsActive
 	FROM	[Account].[UserVault]
 	WHERE	(@UserId IS NULL OR @UserId = 0 OR UserId = @UserId)
 END;

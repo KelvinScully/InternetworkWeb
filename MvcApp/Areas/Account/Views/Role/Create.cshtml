@@ -1,1 +1,32 @@
-﻿
+﻿@using MvcApp.Areas.Account.Models
+@model UserRoleModel;
+@{
+    ViewData["Title"] = "Create Role";
+}
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-1 d-none d-md-block sidebar">
+            @await Html.PartialAsync("../Shared/SidebarNav.cshtml", "Create Role")
+        </nav>
+        <div class="col-xl-10 px-4">
+            <h1 class="text-center">@ViewData["Title"]</h1>
+            <form asp-area="Account" asp-controller="Role" asp-action="Insert" method="post">
+                <div class="mb-3 col-md-3">
+                    <label>User Role Name</label>
+                    <input type="text" asp-for="UserRoleName" class="form-control" placeholder="Enter Role Name" />
+                </div>
+
+                <div class="dropdown-divider"></div>
+
+                <div class="row justify-content-end p-4">
+                    <div class="col-2 p-1">
+                        <button class="btn btn-primary btn-block" type="submit">Submit</button>
+                    </div>
+                    <div class="col-2 p-1">
+                        <a class="btn btn-secondary btn-block" asp-area="Account" asp-controller="Role" asp-action="Index" role="button">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
