@@ -1,1 +1,42 @@
-﻿
+﻿@using MvcApp.Areas.Account.Models
+@model UserModel;
+@{
+    ViewData["Title"] = "Create User";
+}
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-1 d-none d-md-block sidebar">
+            @await Html.PartialAsync("../Shared/SidebarNav.cshtml", "Create User")
+        </nav>
+        <div class="col-xl-10 px-4">
+            <h1 class="text-center">@ViewData["Title"]</h1>
+            <form asp-area="Account" asp-controller="User" asp-action="Insert" method="post">
+                <div class="mb-3 col-md-3">
+                    <label>Username</label>
+                    <input type="text" asp-for="UserName" class="form-control" placeholder="Enter Username" />
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label>Email</label>
+                    <input type="email" asp-for="UserEmail" class="form-control" placeholder="Enter Email" />
+                </div>
+
+                <div class="mb-3 col-md-3">
+                    <label>Password</label>
+                    <input type="password" asp-for="Password" class="form-control" placeholder="Enter Password" />
+                </div>
+
+                <div class="dropdown-divider"></div>
+
+                <div class="row justify-content-end p-4">
+                    <div class="col-2 p-1">
+                        <button class="btn btn-primary btn-block" type="submit">Submit</button>
+                    </div>
+                    <div class="col-2 p-1">
+                        <a class="btn btn-secondary btn-block" asp-area="Account" asp-controller="User" asp-action="Index" role="button">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
