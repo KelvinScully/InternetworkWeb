@@ -35,6 +35,8 @@ namespace MvcApp.Services
         // User N User Role
         Task<ApiResult<bool>> InsertUserNUserRole(int userId, int userRoleId);
         Task<ApiResult<bool>> DeleteUserNUserRole(int userId, int userRoleId);
+
+        Task SignOutUserAsync();
     }
     public class AccountService(IAccountRepoService repo, IMapper mapper, IHttpContextAccessor httpContextAccessor) : IAccountService
     {
@@ -180,6 +182,29 @@ namespace MvcApp.Services
             await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
             {
                 IsPersistent = rememberMe
+            });
+        }
+
+        public async Task SignOutUserAsync()
+        {
+            var context = _httpContextAccessor.HttpContext!;
+            await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var claims = new List<Claim>
+            {
+                new Claim("Userid", "0"),
+                new Claim("Username", "Guest"),
+                new Claim("email", ""),
+                new Claim(ClaimTypes.Role, "Guest"),
+            };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            context.User = principal;
+            await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
+            {
+                IsPersistent = false
             });
         }
     }

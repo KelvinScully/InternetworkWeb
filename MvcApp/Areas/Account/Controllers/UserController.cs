@@ -16,6 +16,12 @@ namespace MvcApp.Areas.Account.Controllers
         [HttpGet("[area]/[controller]/{ShowInactive?}")]
         public async Task<IActionResult> Index(bool ShowInactive = false)
         {
+            if (User.IsInRole("Guest"))
+                return RedirectToAction("Gate", "Entry");
+
+            if (!User.IsInRole("SuperAdmin") || !User.IsInRole("Admin") || !User.IsInRole("Account Manager"))
+                return RedirectToAction("NoRole", "Entry");
+
             var model = await _Service.GetUser(ShowInactive);
             return View(model);
         }
@@ -23,12 +29,24 @@ namespace MvcApp.Areas.Account.Controllers
         [HttpGet("[area]/[controller]/Create")]
         public IActionResult Create()
         {
+            if (User.IsInRole("Guest"))
+                return RedirectToAction("Gate", "Entry");
+
+            if (!User.IsInRole("SuperAdmin") || !User.IsInRole("Admin") || !User.IsInRole("Account Manager"))
+                return RedirectToAction("NoRole", "Entry");
+
             return View(new UserModel());
         }
 
         [HttpGet("[area]/[controller]/Edit/{Id}")]
         public async Task<IActionResult> Edit(int Id)
         {
+            if (User.IsInRole("Guest"))
+                return RedirectToAction("Gate", "Entry");
+
+            if (!User.IsInRole("SuperAdmin") || !User.IsInRole("Admin") || !User.IsInRole("Account Manager"))
+                return RedirectToAction("NoRole", "Entry");
+
             var model = await _Service.GetUser(Id);
             return View(model);
         }
