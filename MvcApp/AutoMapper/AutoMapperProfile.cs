@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DataAccessLayer.Objects.Account;
 using DataAccessLayer.Objects.Inventory;
-using MvcApp.Areas.Account.Model;
+using MvcApp.Areas.Account.Models;
 using MvcApp.Areas.Inventory.Models;
 
 namespace MvcApp.AutoMapper
@@ -17,6 +17,7 @@ namespace MvcApp.AutoMapper
             CreateMap<ItemLocationModel, ItemLocationApo>().ReverseMap();
             CreateMap<ItemStatusModel, ItemStatusApo>().ReverseMap();
             CreateMap<UserModel, UserApo>().ReverseMap();
+            CreateMap<UserRoleModel, UserRoleApo>().ReverseMap();
 
             // CreateMap<From, To>();
             // One Way Maps

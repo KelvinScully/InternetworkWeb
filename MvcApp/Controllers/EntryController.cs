@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MvcApp.Areas.Account.Model;
+using MvcApp.Areas.Account.Models;
 using MvcApp.Services;
 using System.Text.Json;
 
