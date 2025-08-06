@@ -5,5 +5,6 @@
         public int ItemLocationId { get; set; }
         public string ItemLocationName { get; set; } = string.Empty;
         public bool IsActive { get; set; }
+        public bool ShowInactive { get; set; }
     }
 }

@@ -54,7 +54,7 @@
     }
     @if (Model.Contains("Status"))
     {
-        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Status" asp-action="Index" role="button">
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Status" asp-action="Index" asp-route-ShowInactive="false" role="button">
             @if (Model.Contains("Create") || Model.Contains("Edit"))
             { <z>Status</z> }
             else
@@ -72,7 +72,7 @@
     else
     {
 
-        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Status" asp-action="Index" role="button">
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Status" asp-action="Index" asp-route-ShowInactive="false" role="button">
             &ensp;Status
         </a>
     }

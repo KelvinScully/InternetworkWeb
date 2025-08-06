@@ -4,6 +4,7 @@ using DataAccessLayer.Interfaces;
 using DataAccessLayer.Objects.Account;
 using DataAccessLayer.Objects.Inventory;
 using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace DataAccessLayer.Services
 {
@@ -13,8 +14,7 @@ namespace DataAccessLayer.Services
         {
             SqlParameter[] parameters =
             [
-                new("@UserId", 0),
-                new("@IsActive", 1)
+                new("@UserId", SqlDbType.Int) { Value = 0 }
             ];
 
             Dictionary<string, string> propertyMap = new()
@@ -52,8 +52,7 @@ namespace DataAccessLayer.Services
         {
             SqlParameter[] parameters =
             [
-                new("@UserId", userId),
-                new("@IsActive", 1)
+                new("@UserId", userId)
             ];
 
             Dictionary<string, string> propertyMap = new()
@@ -91,8 +90,7 @@ namespace DataAccessLayer.Services
         {
             SqlParameter[] parameters =
             [
-                new("@UserName", userName),
-                new("@IsActive", 1)
+                new("@UserName", userName)
             ];
 
             Dictionary<string, string> propertyMap = new()

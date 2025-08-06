@@ -30,8 +30,7 @@ GO;
 -- =============================================
 
 CREATE OR ALTER PROCEDURE [Inventory].[ItemGet]
-	@ItemId		INT = NULL,
-	@IsActive	BIT = 1
+	@ItemId		INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -59,7 +58,6 @@ BEGIN
 		LEFT JOIN	[Inventory].[ItemStatus]	STAT
 				ON	STAT.ItemStatusId = ITEM.StatusId
 	WHERE	(@ItemId IS NULL OR @ItemId = 0 OR ITEM.ItemId = @ItemId)
-		AND ITEM.IsActive = @IsActive
 
 END;
 

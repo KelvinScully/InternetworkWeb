@@ -14,5 +14,6 @@
         public string ItemStatusName { get; set; } = string.Empty;
 
         public bool IsActive { get; set; }
+        public bool ShowInactive { get; set; }
     }
 }
