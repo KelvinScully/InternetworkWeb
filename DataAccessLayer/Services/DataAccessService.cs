@@ -44,8 +44,8 @@ namespace DataAccessLayer.Services
                     if (reader.IsDBNull(ordinal))
                         continue;
 
-                    var value = DataReaderHelper.Get<object>(reader, columnName);
-                    if (value != null)
+                    var value = reader.GetValue(ordinal);
+                    if (value != DBNull.Value)
                         prop.SetValue(obj, value);
 
                 }
@@ -82,8 +82,8 @@ namespace DataAccessLayer.Services
                     if (reader.IsDBNull(ordinal))
                         continue;
 
-                    var value = DataReaderHelper.Get<object>(reader, columnName);
-                    if (value != null)
+                    var value = reader.GetValue(ordinal);
+                    if (value != DBNull.Value)
                         prop.SetValue(obj, value);
 
                 }
@@ -144,6 +144,10 @@ namespace DataAccessLayer.Services
                 return default;
 
             object value = reader.GetValue(ordinal);
+
+            // Handle byte[] (varbinary) directly
+            if (typeof(T) == typeof(byte[]))
+                return (T)value;
 
             // Handles nullable types, enums, etc.
             if (typeof(T).IsEnum)
