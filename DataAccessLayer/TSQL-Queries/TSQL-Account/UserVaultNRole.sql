@@ -25,10 +25,8 @@ GO;
 -- =============================================
 
 CREATE OR ALTER PROCEDURE [Account].[UserVaultNRoleGet]
-	@UserId		INT = NULL,
-	@UserRoleId	INT = NULL,
-	@IsActiveUser	BIT = 1,
-	@IsActiveRole	BIT = 1
+	@UserId		INT,
+	@UserRoleId	INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -44,7 +42,6 @@ BEGIN
 				ON	AccUSER.UserId = AccUSERNROLE.UserId
 	WHERE	(@UserId IS NULL OR @UserId = 0 OR AccUSERNROLE.UserId = @UserId)
 		AND (@UserRoleId IS NULL OR @UserRoleId = 0 OR AccUSERNROLE.UserRoleId = @UserRoleId)
-		AND AccUSER.IsActive = @IsActiveUser
 END;
 
 -- =============================================

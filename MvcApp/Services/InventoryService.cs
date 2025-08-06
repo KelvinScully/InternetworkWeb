@@ -9,26 +9,26 @@ namespace MvcApp.Services
     public interface IInventoryService
     {
         // Item 
-        Task<List<ItemModel>> GetItem();
+        Task<List<ItemModel>> GetItem(bool returnInactive);
         Task<ItemModel> GetItem(int itemId);
         Task<ApiResult<bool>> InsertItem(ItemModel itemModel);
         Task<ApiResult<bool>> UpdateItem(ItemModel itemModel);
         Task<ApiResult<bool>> DeleteItem(int itemId);
         // Item Category
-        Task<List<ItemCategoryModel>> GetItemCategory();
+        Task<List<ItemCategoryModel>> GetItemCategory(bool returnInactive);
         Task<ItemCategoryModel> GetItemCategory(int itemCategoryId);
         Task<ApiResult<bool>> InsertItemCategory(ItemCategoryModel itemCategoryModel);
         Task<ApiResult<bool>> UpdateItemCategory(ItemCategoryModel itemCategoryModel);
         Task<ApiResult<bool>> DeleteItemCategory(int itemCategoryId);
         // Item Location
-        Task<List<ItemLocationModel>> GetItemLocation();
+        Task<List<ItemLocationModel>> GetItemLocation(bool returnInactive);
         Task<ItemLocationModel> GetItemLocation(int itemLocationId);
         Task<ApiResult<bool>> InsertItemLocation(ItemLocationModel itemLocationModel);
         Task<ApiResult<bool>> UpdateItemLocation(ItemLocationModel itemLocationModel);
         Task<ApiResult<bool>> DeleteItemLocation(int itemLocationId);
 
         // Item Status
-        Task<List<ItemStatusModel>> GetItemStatus();
+        Task<List<ItemStatusModel>> GetItemStatus(bool returnInactive);
         Task<ItemStatusModel> GetItemStatus(int itemStatusId);
         Task<ApiResult<bool>> InsertItemStatus(ItemStatusModel itemStatusModel);
         Task<ApiResult<bool>> UpdateItemStatus(ItemStatusModel itemStatusModel);
@@ -41,10 +41,12 @@ namespace MvcApp.Services
         public readonly IMapper _Mapper = mapper;
 
         // Item
-        public async Task<List<ItemModel>> GetItem()
+        public async Task<List<ItemModel>> GetItem(bool returnInactive)
         {
-            var data = (await _Repo.InventoryItemGet()).Value;
+            var data = (await _Repo.InventoryItemGet(returnInactive)).Value;
             var result = _Mapper.Map<List<ItemModel>>(data);
+            foreach (var obj in result)
+                obj.ShowInactive = returnInactive;
             return result;
         }
         public async Task<ItemModel> GetItem(int itemId)
@@ -73,10 +75,12 @@ namespace MvcApp.Services
         }
 
         // Item Category
-        public async Task<List<ItemCategoryModel>> GetItemCategory()
+        public async Task<List<ItemCategoryModel>> GetItemCategory(bool returnInactive)
         {
-            var data = (await _Repo.InventoryItemCategoryGet()).Value;
+            var data = (await _Repo.InventoryItemCategoryGet(returnInactive)).Value;
             var result = _Mapper.Map<List<ItemCategoryModel>>(data);
+            foreach (var obj in result)
+                obj.ShowInactive = returnInactive;
             return result;
         }
         public async Task<ItemCategoryModel> GetItemCategory(int itemCategoryId)
@@ -105,10 +109,12 @@ namespace MvcApp.Services
         }
 
         // Item Location
-        public async Task<List<ItemLocationModel>> GetItemLocation()
+        public async Task<List<ItemLocationModel>> GetItemLocation(bool returnInactive)
         {
-            var data = (await _Repo.InventoryItemLocationGet()).Value;
+            var data = (await _Repo.InventoryItemLocationGet(returnInactive)).Value;
             var result = _Mapper.Map<List<ItemLocationModel>>(data);
+            foreach (var obj in result)
+                obj.ShowInactive = returnInactive;
             return result;
         }
         public async Task<ItemLocationModel> GetItemLocation(int itemLocationId)
@@ -137,10 +143,12 @@ namespace MvcApp.Services
         }
 
         // Item Status
-        public async Task<List<ItemStatusModel>> GetItemStatus()
+        public async Task<List<ItemStatusModel>> GetItemStatus(bool returnInactive)
         {
-            var data = (await _Repo.InventoryItemStatusGet()).Value;
+            var data = (await _Repo.InventoryItemStatusGet(returnInactive)).Value;
             var result = _Mapper.Map<List<ItemStatusModel>>(data);
+            foreach (var obj in result)
+                obj.ShowInactive = returnInactive;
             return result;
         }
         public async Task<ItemStatusModel> GetItemStatus(int itemStatusId)

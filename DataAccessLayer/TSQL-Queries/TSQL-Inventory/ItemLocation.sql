@@ -25,8 +25,7 @@ GO;
 -- =============================================
 
 CREATE OR ALTER PROCEDURE [Inventory].[SpItemLocationGet]
-	@ItemLocationId	INT = NULL,
-	@IsActive		BIT = 1
+	@ItemLocationId	INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -37,7 +36,6 @@ BEGIN
 		IsActive
 	FROM	[Inventory].[ItemLocation]
 	WHERE	(@ItemLocationId IS NULL OR @ItemLocationId = 0 OR ItemLocationId = @ItemLocationId)
-		AND IsActive = @IsActive
 END;
 
 -- =============================================

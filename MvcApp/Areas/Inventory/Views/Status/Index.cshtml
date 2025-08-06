@@ -28,7 +28,23 @@
                     <tr>
 
                         <th width="80%">Name</th>
-                        <th></th>
+                        <th>
+                            @if (Model != null || Model.Count > 0)
+                            {
+                                @if (Model[0].ShowInactive)
+                                {
+                                    <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Status" asp-action="Index" asp-route-ShowInactive="false" role="button">
+                                        Hide Deleted
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Status" asp-action="Index" asp-route-ShowInactive="true" role="button">
+                                        Show Deleted
+                                    </a>
+                                }
+                            }
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,12 +59,15 @@
                                         <a class="btn btn-sm btn-outline-primary" asp-area="Inventory" asp-controller="Status" asp-action="Edit" asp-route-id="@status.ItemStatusId" title="Edit">
                                             <i class="bi bi-pencil-square"></i> Edit
                                         </a>
-                                        <form class="d-inline" asp-area="Inventory" asp-controller="Status" asp-action="Delete" asp-route-id="@status.ItemStatusId" method="post">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete"
-                                                    onclick="return confirm('Are you sure you want to delete this status?');">
-                                                <i class="bi bi-trash"></i> Delete
-                                            </button>
-                                        </form>
+                                        @if (status.IsActive)
+                                        {
+                                            <form class="d-inline" asp-area="Inventory" asp-controller="Status" asp-action="Delete" asp-route-id="@status.ItemStatusId" method="post">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete"
+                                                        onclick="return confirm('Are you sure you want to delete this status?');">
+                                                    <i class="bi bi-trash"></i> Delete
+                                                </button>
+                                            </form>
+                                        }
                                     </div>
                                 </td>
                             </tr>

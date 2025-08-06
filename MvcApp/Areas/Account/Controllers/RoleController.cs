@@ -1,39 +1,34 @@
-﻿using DataAccessLayer.Objects.Inventory;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+﻿using Microsoft.AspNetCore.Mvc;
 using MvcApp.Areas.Inventory.Models;
 using MvcApp.Services;
 
-namespace MvcApp.Areas.Inventory.Controllers
+namespace MvcApp.Areas.Account.Controllers
 {
-    [Area("Inventory")]
-    public class StatusController(IInventoryService service) : Controller
+    [Area("Account")]
+    public class RoleController(IAccountService service) : Controller
     {
-        private readonly IInventoryService _Service = service;
+        public IAccountService _Service = service;
 
         // =======================
         // Page Routes (Views)
         // =======================
 
-        [HttpGet("[area]/[controller]/{ShowInactive}")]
-        public async Task<IActionResult> Index(bool ShowInactive)
+        [HttpGet("[area]/[controller]")]
+        public async Task<IActionResult> Index()
         {
-            var model = await _Service.GetItemStatus(ShowInactive);
-            return View(model);
+            return View();
         }
 
         [HttpGet("[area]/[controller]/Create")]
         public async Task<IActionResult> Create()
         {
-            ItemStatusModel model = new();
-            return View(model);
+            return View();
         }
 
         [HttpGet("[area]/[controller]/Edit/{Id}")]
         public async Task<IActionResult> Edit(int Id)
         {
-            ItemStatusModel model = await _Service.GetItemStatus(Id);
-            return View(model);
+            return View();
         }
 
         // =======================
@@ -46,7 +41,6 @@ namespace MvcApp.Areas.Inventory.Controllers
             if (!ModelState.IsValid)
                 return View("Create", model);
 
-            await _Service.InsertItemStatus(model);
             return RedirectToAction("Index");
         }
 
@@ -56,14 +50,12 @@ namespace MvcApp.Areas.Inventory.Controllers
             if (!ModelState.IsValid)
                 return View("Edit", model);
 
-            await _Service.UpdateItemStatus(model);
             return RedirectToAction("Index");
         }
 
         [HttpPost("[area]/[controller]/Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
-            await _Service.DeleteItemStatus(Id);
             return RedirectToAction("Index");
         }
     }
