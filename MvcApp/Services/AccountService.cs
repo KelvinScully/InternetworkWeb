@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Common.Objects;
 using DataAccessLayer.Objects.Account;
+using DataAccessLayer.Objects.Inventory;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using MvcApp.Areas.Account.Model;
+using MvcApp.Areas.Inventory.Models;
 using Repository.Interfaces;
 using System.Security.Claims;
 
@@ -10,6 +13,14 @@ namespace MvcApp.Services
 {
     public interface IAccountService
     {
+        Task<List<UserModel>> GetUser(bool returnInactive);
+        Task<UserModel> GetUser(int userId);
+        Task<UserModel> GetUser(string userName);
+        Task<ApiResult<bool>> InsertUser(UserModel userModel);
+        Task<ApiResult<bool>> UpdateUser(UserModel userModel);
+        Task<ApiResult<bool>> VerifyUser(int userId);
+        Task<ApiResult<bool>> DeleteUser(int userId);
+
         Task<UserModel> Register(LoginRegisterModel user);
         Task<UserModel> Authenticate(LoginRegisterModel user);
     }
@@ -18,6 +29,51 @@ namespace MvcApp.Services
         public readonly IAccountRepoService _Repo = repo;
         public readonly IMapper _Mapper = mapper;
         public readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+
+        public async Task<List<UserModel>> GetUser(bool returnInactive)
+        {
+            var data = (await _Repo.AccountGetUser(returnInactive)).Value;
+            var result = _Mapper.Map<List<UserModel>>(data);
+            foreach (var obj in result)
+                obj.ShowInactive = returnInactive;
+            return result;
+        }
+        public async Task<UserModel> GetUser(int userId)
+        {
+            var data = (await _Repo.AccountGetUser(userId)).Value;
+            var result = _Mapper.Map<UserModel>(data);
+            return result;
+        }
+        public async Task<UserModel> GetUser(string userName)
+        {
+            var data = (await _Repo.AccountGetUser(userName)).Value;
+            var result = _Mapper.Map<UserModel>(data);
+            return result;
+        }
+        public async Task<ApiResult<bool>> InsertUser(UserModel userModel)
+        {
+            var data = await _Repo.AccountUserInsert(_Mapper.Map<UserApo>(userModel));
+            var result = data;
+            return result;
+        }
+        public async Task<ApiResult<bool>> UpdateUser(UserModel userModel)
+        {
+            var data = await _Repo.AccountUserUpdate(_Mapper.Map<UserApo>(userModel));
+            var result = data;
+            return result;
+        }
+        public async Task<ApiResult<bool>> VerifyUser(int userId)
+        {
+            var data = await _Repo.AccountUserVerify(userId);
+            var result = data;
+            return result;
+        }
+        public async Task<ApiResult<bool>> DeleteUser(int userId)
+        {
+            var data = await _Repo.AccountUserDelete(userId);
+            var result = data;
+            return result;
+        }
 
         public async Task<UserModel> Register(LoginRegisterModel user)
         {

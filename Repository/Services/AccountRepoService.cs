@@ -12,12 +12,27 @@ namespace Repository.Services
     {
         private readonly IAccountBllService _Bll = bll;
 
-        public async Task<ApiResult<List<UserApo>>> AccountGetUser()
+        public async Task<ApiResult<List<UserApo>>> AccountGetUser(bool returnInactive)
         {
             try
             {
                 var result = await _Bll.UserGet();
-                return result ?? new ApiResult<List<UserApo>> { IsSuccessful = false, Value = [], Message = "Empty result" };
+                if (result == null || !result.IsSuccessful || result.Value == null || result.Value.Count == 0)
+                {
+                    return new ApiResult<List<UserApo>>
+                    {
+                        IsSuccessful = false,
+                        Value = [],
+                        Message = "Empty result"
+                    };
+                }
+                else
+                {
+                    if (!returnInactive)
+                        result.Value = result.Value.Where(obj => obj.IsActive).ToList();
+
+                    return result;
+                }
             }
             catch (Exception ex)
             {
@@ -34,7 +49,19 @@ namespace Repository.Services
             try
             {
                 var result = await _Bll.UserGet(userId);
-                return result ?? new ApiResult<UserApo> { IsSuccessful = false, Value = new(), Message = "Empty result" };
+                if (result == null || !result.IsSuccessful || result.Value == null)
+                {
+                    return new ApiResult<UserApo>
+                    {
+                        IsSuccessful = false,
+                        Value = new(),
+                        Message = "Empty result"
+                    };
+                }
+                else
+                {
+                    return result;
+                }
             }
             catch (Exception ex)
             {
@@ -63,64 +90,6 @@ namespace Repository.Services
                 };
             }
         }
-
-        public async Task<ApiResult<UserApo>> Register(UserApo user)
-        {
-            try
-            {
-                var result = await _Bll.Register(user);
-
-                if (!result.IsSuccessful)
-                {
-                    return new ApiResult<UserApo>
-                    {
-                        IsSuccessful = false,
-                        Value = new(),
-                        Message = $"Failed: {result.Message}"
-                    };
-                }
-
-                return result ?? new ApiResult<UserApo> { IsSuccessful = false, Value = new(), Message = "Empty result" };
-            }
-            catch (Exception ex)
-            {
-                return new ApiResult<UserApo>
-                {
-                    IsSuccessful = false,
-                    Value = new(),
-                    Message = $"Exception: {ex.Message}"
-                };
-            }
-        }
-        public async Task<ApiResult<UserApo>> Authenticate(UserApo user)
-        {
-            try
-            {
-                var result = await _Bll.Authenticate(user);
-
-                if (!result.IsSuccessful)
-                {
-                    return new ApiResult<UserApo>
-                    {
-                        IsSuccessful = false,
-                        Value = new(),
-                        Message = $"Failed: {result.Message}"
-                    };
-                }
-
-                return result ?? new ApiResult<UserApo> { IsSuccessful = false, Value = new(), Message = "Empty result" };
-            }
-            catch (Exception ex)
-            {
-                return new ApiResult<UserApo>
-                {
-                    IsSuccessful = false,
-                    Value = new(),
-                    Message = $"Exception: {ex.Message}"
-                };
-            }
-        }
-
         public async Task<ApiResult<bool>> AccountUserInsert(UserApo userApo)
         {
             try
@@ -241,6 +210,63 @@ namespace Repository.Services
                 {
                     IsSuccessful = false,
                     Value = false,
+                    Message = $"Exception: {ex.Message}"
+                };
+            }
+        }
+
+        public async Task<ApiResult<UserApo>> Register(UserApo user)
+        {
+            try
+            {
+                var result = await _Bll.Register(user);
+
+                if (!result.IsSuccessful)
+                {
+                    return new ApiResult<UserApo>
+                    {
+                        IsSuccessful = false,
+                        Value = new(),
+                        Message = $"Failed: {result.Message}"
+                    };
+                }
+
+                return result ?? new ApiResult<UserApo> { IsSuccessful = false, Value = new(), Message = "Empty result" };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<UserApo>
+                {
+                    IsSuccessful = false,
+                    Value = new(),
+                    Message = $"Exception: {ex.Message}"
+                };
+            }
+        }
+        public async Task<ApiResult<UserApo>> Authenticate(UserApo user)
+        {
+            try
+            {
+                var result = await _Bll.Authenticate(user);
+
+                if (!result.IsSuccessful)
+                {
+                    return new ApiResult<UserApo>
+                    {
+                        IsSuccessful = false,
+                        Value = new(),
+                        Message = $"Failed: {result.Message}"
+                    };
+                }
+
+                return result ?? new ApiResult<UserApo> { IsSuccessful = false, Value = new(), Message = "Empty result" };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<UserApo>
+                {
+                    IsSuccessful = false,
+                    Value = new(),
                     Message = $"Exception: {ex.Message}"
                 };
             }

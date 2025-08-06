@@ -16,6 +16,7 @@ namespace MvcApp.Areas.Account.Model
         public bool IsActive { get; set; }
         public bool RememberMe { get; set; } = false;
         public List<UserRoleApo> UserRoles { get; set; } = [];
+        public bool ShowInactive { get; set; }
         public bool IsDefault()
         {
             if (UserId == 0 && string.IsNullOrEmpty(UserName) && string.IsNullOrEmpty(Password) && string.IsNullOrEmpty(UserEmail) && RememberMe == false) { return true; }
