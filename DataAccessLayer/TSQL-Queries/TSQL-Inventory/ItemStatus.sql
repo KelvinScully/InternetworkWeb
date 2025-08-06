@@ -25,8 +25,7 @@ GO;
 -- =============================================
 
 CREATE OR ALTER PROCEDURE [Inventory].[SpItemStatusGet]
-	@ItemStatusId	INT = NULL,
-	@IsActive		BIT = 1
+	@ItemStatusId	INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -37,7 +36,6 @@ BEGIN
 		IsActive
 	FROM	[Inventory].[ItemStatus]
 	WHERE	(@ItemStatusId IS NULL OR @ItemStatusId = 0 OR ItemStatusId = @ItemStatusId)
-		AND IsActive = @IsActive
 END;
 
 -- =============================================

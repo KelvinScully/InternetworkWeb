@@ -30,8 +30,7 @@ GO;
 -- =============================================
 
 CREATE OR ALTER PROCEDURE [Account].[SpUserVaultGetById]
-	@UserId		INT = NULL,
-	@IsActive	BIT = 1
+	@UserId		INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -45,7 +44,6 @@ BEGIN
 		CreatedDateTime
 	FROM	[Account].[UserVault]
 	WHERE	(@UserId IS NULL OR @UserId = 0 OR UserId = @UserId)
-		AND IsActive = @IsActive
 END;
 
 -- =============================================
@@ -57,8 +55,7 @@ GO;
 -- =============================================
 
 CREATE OR ALTER PROCEDURE [Account].[SpUserVaultGetByUserName]
-	@UserName	VARCHAR(128),
-	@IsActive	BIT
+	@UserName	VARCHAR(128)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -72,7 +69,6 @@ BEGIN
 		CreatedDateTime
 	FROM	[Account].[UserVault]
 	WHERE	UserName = @UserName
-		AND IsActive = @IsActive
 END;
 
 -- =============================================
