@@ -5,27 +5,45 @@
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
-        <nav class="col-md-1 d-none d-md-block sidebar">
-            <!-- Your SidebarNav goes here -->
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar border-end vh-100 p-3">
             @await Html.PartialAsync("../Shared/SidebarNav.cshtml", "Index")
         </nav>
-        <div class="col-xl-10 px-4">
-            <div class="row">
-                <div class="col-3"></div>
-                <div class="col-6">
-                    <h1 class="text-center">@ViewData["Title"]</h1>
-                    <h2>Welcome to the Account area</h2>
-                </div>
-                <div class="col-3"></div>
-                @if (ViewData["Error"] != null && ViewData["Error"].ToString().Length > 0)
-                {
-                    <h6 class="alert alert-danger" role="alert">@ViewData["Error"]</h6>
-                }
+
+        <!-- Main content -->
+        <main class="col-md-10 ms-sm-auto px-4 pt-4">
+            <div class="text-center mb-4">
+                <h1 class="fw-bold text-primary">@ViewData["Title"]</h1>
+                <h4 class="text-muted">Welcome to the Account Area</h4>
             </div>
-            <!-- Content goes under here -->
 
+            <!-- Optional error message -->
+            @if (ViewData["Error"] != null && ViewData["Error"].ToString().Length > 0)
+            {
+                <div class="alert alert-danger text-center" role="alert">
+                    @ViewData["Error"]
+                </div>
+            }
 
-            <div class="col-1"></div>
-        </div>
+            <!-- Placeholder for future content -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">👤 Account Overview</h5>
+                    <p class="card-text text-muted">
+                        This section is intended to handle user authentication, registration, and profile management.
+                        Some of these features may be documented but not fully implemented yet.
+                    </p>
+                    <ul class="list-unstyled">
+                        <li>✔ User login and logout</li>
+                        <li>✔ Registration form</li>
+                        <li>✔ Remember Me functionality</li>
+                        <li>✔ (Planned) Profile editing and password change</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="alert alert-info text-center shadow-sm" role="alert">
+                <strong>Note:</strong> This page presents a visual overview of planned Account functionality.
+            </div>
+        </main>
     </div>
 </div>
