@@ -3,31 +3,62 @@
 @{
     ViewData["Title"] = "Edit Role";
 }
+
 <div class="container-fluid">
     <div class="row">
-        <nav class="col-md-1 d-none d-md-block sidebar">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar border-end vh-100 p-3">
             @await Html.PartialAsync("../Shared/SidebarNav.cshtml", "Edit Role")
         </nav>
-        <div class="col-xl-10 px-4">
-            <h1 class="text-center">@ViewData["Title"]</h1>
-            <form asp-area="Account" asp-controller="Role" asp-action="Update" method="post">
-                <input type="hidden" asp-for="UserRoleId" />
-                <div class="mb-3 col-md-3">
-                    <label>User Role Name</label>
-                    <input type="text" asp-for="UserRoleName" class="form-control" />
-                </div>
 
-                <div class="dropdown-divider"></div>
+        <!-- Main content -->
+        <main class="col-md-10 ms-sm-auto px-4 pt-4">
+            <div class="text-center mb-4">
+                <h1 class="fw-bold text-primary">@ViewData["Title"]</h1>
+                <h4 class="text-muted">Modify an existing user role</h4>
+            </div>
 
-                <div class="row justify-content-end p-4">
-                    <div class="col-2 p-1">
-                        <button class="btn btn-primary btn-block" type="submit">Submit</button>
-                    </div>
-                    <div class="col-2 p-1">
-                        <a class="btn btn-secondary btn-block" asp-area="Account" asp-controller="Role" asp-action="Index" role="button">Cancel</a>
-                    </div>
+            <!-- Optional error message -->
+            @if (ViewData["Error"] != null && ViewData["Error"].ToString().Length > 0)
+            {
+                <div class="alert alert-danger text-center" role="alert">
+                    @ViewData["Error"]
                 </div>
-            </form>
-        </div>
+            }
+
+            <!-- Edit form -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <form asp-area="Account" asp-controller="Role" asp-action="Update" method="post">
+                        <input type="hidden" asp-for="UserRoleId" />
+
+                        <div class="mb-3">
+                            <label asp-for="UserRoleName" class="form-label">Role Name</label>
+                            <input asp-for="UserRoleName" class="form-control" />
+                            <span asp-validation-for="UserRoleName" class="text-danger"></span>
+                        </div>
+
+                        <div class="row justify-content-end mt-4">
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                            <div class="col-auto">
+                                <a asp-area="Account" asp-controller="Role" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="alert alert-info text-center shadow-sm" role="alert">
+                <strong>Note:</strong> Role updates will be reflected immediately in the system.
+            </div>
+        </main>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
