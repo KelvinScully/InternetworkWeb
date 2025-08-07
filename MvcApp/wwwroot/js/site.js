@@ -7,19 +7,40 @@ document.addEventListener("DOMContentLoaded", function () {
     const toggleButton = document.getElementById("darkModeToggle");
     const icon = document.getElementById("darkModeIcon");
     const body = document.body;
+    const DURATION = 200; // keep in sync with CSS (150ms + buffer)
 
-    function applyDarkMode(isDark) {
-        body.classList.toggle("dark-mode", isDark);
+    function setIcon(isDark) {
+        if (!icon) return;
         icon.classList.remove("bi-moon", "bi-sun");
         icon.classList.add(isDark ? "bi-sun" : "bi-moon");
-        localStorage.setItem("darkMode", isDark ? "enabled" : "disabled");
     }
 
-    // Load preference
+    function applyDarkMode(isDark, { animate } = { animate: false }) {
+        if (animate) {
+            body.classList.add("theme-transition");
+            // Next frame: toggle the class to trigger transition
+            requestAnimationFrame(() => {
+                body.classList.toggle("dark-mode", isDark);
+                setIcon(isDark);
+                localStorage.setItem("darkMode", isDark ? "enabled" : "disabled");
+
+                // Remove the gate after transition completes
+                setTimeout(() => body.classList.remove("theme-transition"), DURATION);
+            });
+        } else {
+            // No animation on initial load
+            body.classList.toggle("dark-mode", isDark);
+            setIcon(isDark);
+            localStorage.setItem("darkMode", isDark ? "enabled" : "disabled");
+        }
+    }
+
+    // Load preference without animation
     const isDark = localStorage.getItem("darkMode") === "enabled";
-    applyDarkMode(isDark);
+    applyDarkMode(isDark, { animate: false });
 
     toggleButton?.addEventListener("click", function () {
-        applyDarkMode(!body.classList.contains("dark-mode"));
+        const next = !body.classList.contains("dark-mode");
+        applyDarkMode(next, { animate: true });
     });
 });
