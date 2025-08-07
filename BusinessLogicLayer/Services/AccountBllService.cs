@@ -143,7 +143,13 @@ namespace BusinessLogicLayer.Services
         {
             try
             {
-                var dalResult = await _Dal.UserInsert(userApo);
+                // 128 Bit Salt
+                byte[] userSalt = RandomNumberGenerator.GetBytes(16);
+                // 256 Bit Hash
+                using var rfc2898 = new Rfc2898DeriveBytes(userApo.Password, userSalt, 100_000, HashAlgorithmName.SHA256);
+                byte[] userHash = rfc2898.GetBytes(32);
+
+                var dalResult = await _Dal.UserInsert(new UserApo() { UserName = userApo.UserName, UserEmail = userApo.UserEmail, UserHash = userHash, UserSalt = userSalt });
 
                 if (!dalResult.IsSuccessful)
                 {
