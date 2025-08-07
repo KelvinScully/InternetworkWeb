@@ -166,47 +166,59 @@ GO;
 -- Author:		<Vasquez, Dillon>
 -- Create date: 08/03/2025
 -- Description:	Store Procedure: Account User Vault Update
+-- Edited by Garrett, Christian on 8/6/2025 to allow duplicate emails so you can change a user's username without having to change their email, should still block duplicate emails from new users
 -- =============================================
 
-CREATE OR ALTER PROCEDURE [Account].[SpUserVaultUpdate]
-	@UserId		INT,
-	@UserName	VARCHAR(128),
-	@UserEmail	VARCHAR(128),
-
-	@UserHash	VARBINARY(32),
-	@UserSalt	VARBINARY(16)
+CREATE PROCEDURE [Account].[SpUserVaultUpdate]
+    @UserId      INT,
+    @UserName    VARCHAR(128),
+    @UserEmail   VARCHAR(128),
+    @UserHash    VARBINARY(32),
+    @UserSalt    VARBINARY(16)
 AS
 BEGIN
-	SET NOCOUNT ON;
+    SET NOCOUNT ON;
 
-	IF EXISTS (
-		SELECT	*
-		FROM	[Account].[UserVault]
-		WHERE	UserId <> @UserId
-			AND TRIM(LOWER(UserName)) = TRIM(LOWER(@UserName))
-	)
-	BEGIN
-		RAISERROR('Duplicate UserName Found', 16, 1)
-		RETURN;
-	END;
+    -- 1) Block duplicate usernames
+    IF EXISTS (
+        SELECT 1
+          FROM [Account].[UserVault]
+         WHERE UserId <> @UserId
+           AND TRIM(LOWER(UserName)) = TRIM(LOWER(@UserName))
+    )
+    BEGIN
+        RAISERROR('Duplicate UserName Found', 16, 1);
+        RETURN;
+    END;
 
-	IF EXISTS (
-		SELECT	*
-		FROM	[Account].[UserVault]
-		WHERE	TRIM(LOWER(UserEmail)) = TRIM(LOWER(@UserEmail))
-	)
-	BEGIN
-		RAISERROR('Duplicate UserEmail Found', 16, 1)
-		RETURN;
-	END;
+    -- 2) Only enforce email uniqueness if the email has actually changed
+    DECLARE @CurrentEmail VARCHAR(128);
+    SELECT @CurrentEmail = UserEmail
+      FROM [Account].[UserVault]
+     WHERE UserId = @UserId;
 
-	UPDATE	[Account].[UserVault]
-	SET		UserName = @UserName,
-			UserEmail = @UserEmail,
-			UserHash = @UserHash,
-			UserSalt = @UserSalt
-	WHERE	UserId = @UserId
+    IF @CurrentEmail IS NOT NULL 
+       AND TRIM(LOWER(@CurrentEmail)) <> TRIM(LOWER(@UserEmail))
+    BEGIN
+        IF EXISTS (
+            SELECT 1
+              FROM [Account].[UserVault]
+             WHERE UserId <> @UserId
+               AND TRIM(LOWER(UserEmail)) = TRIM(LOWER(@UserEmail))
+        )
+        BEGIN
+            RAISERROR('Duplicate UserEmail Found', 16, 1);
+            RETURN;
+        END;
+    END;
 
+    -- 3) Perform the actual update
+    UPDATE [Account].[UserVault]
+       SET UserName  = @UserName,
+           UserEmail = @UserEmail,
+           UserHash  = @UserHash,
+           UserSalt  = @UserSalt
+     WHERE UserId   = @UserId;
 END;
 
 -- =============================================

@@ -20,6 +20,21 @@
             else
             { <z>Add User</z> }
         </a>
+
+        <!-- ASSIGN ROLES SIDEBAR LINK -->
+        <a class="dropdown-item text-start" style="padding-bottom: 10px"
+           asp-area="Account" asp-controller="User" asp-action="Assign" asp-route-id="@ViewContext.RouteData.Values["id"]">
+            &ensp;&ensp;
+            @if (Model.Contains("Assign"))
+            {
+                <strong>Assign Roles</strong>
+            }
+            else
+            {
+
+                <z>Assign Roles</z>
+            }
+        </a>
     }
     else
     {

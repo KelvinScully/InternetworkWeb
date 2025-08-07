@@ -51,6 +51,56 @@ namespace MvcApp.Areas.Account.Controllers
             return View(model);
         }
 
+        // === NEW: GET AssignRoles ===
+
+        [HttpGet]
+        public async Task<IActionResult> Assign(int Id)
+        {
+            var user = await _Service.GetUser(Id);
+            var allRoles = await _Service.GetUserRole(false);
+
+            var vm = new AssignRolesModel
+            {
+                UserId = user.UserId,
+                UserName = user.UserName,
+                ShowInactive = false,
+                SelectedRoleId = user.UserRoles.FirstOrDefault()?.UserRoleId
+            };
+
+            // only build the list of all active roles
+            foreach (var r in allRoles)
+            {
+                vm.Roles.Add(new AssignRolesModel.RoleItem
+                {
+                    UserRoleId = r.UserRoleId,
+                    UserRoleName = r.UserRoleName
+                });
+            }
+
+            return View(vm);
+        }
+
+        // === NEW: POST AssignRoles ===
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Assign(AssignRolesModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            // 1) Remove _all_ roles currently assigned
+            var currentRoles = (await _Service.GetUser(model.UserId)).UserRoles
+                                           .Select(r => r.UserRoleId);
+            foreach (var rid in currentRoles)
+                await _Service.DeleteUserNUserRole(model.UserId, rid);
+
+            // 2) Insert the one selected (if any)
+            if (model.SelectedRoleId.HasValue && model.SelectedRoleId.Value > 0)
+                await _Service.InsertUserNUserRole(model.UserId, model.SelectedRoleId.Value);
+
+            return RedirectToAction(nameof(Index));
+        }
+
         // =======================
         // Form Actions
         // =======================
