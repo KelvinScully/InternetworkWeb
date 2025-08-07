@@ -62,6 +62,8 @@ namespace DataAccessLayer.Services
                 ["UserId"] = "UserId",
                 ["UserName"] = "UserName",
                 ["UserEmail"] = "UserEmail",
+                ["UserHash"] = "UserHash",
+                ["UserSalt"] = "UserSalt",
                 ["IsEmailVerified"] = "IsEmailVerified",
                 ["IsActive"] = "IsActive"
             };

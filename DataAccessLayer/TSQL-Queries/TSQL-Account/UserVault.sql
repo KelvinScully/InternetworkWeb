@@ -39,7 +39,8 @@ BEGIN
 		UserId,
 		UserName,
 		UserEmail,
-
+        UserHash,
+        UserSalt,
 		IsEmailVerified,
 		IsActive
 	FROM	[Account].[UserVault]
@@ -64,7 +65,8 @@ BEGIN
 		UserId,
 		UserName,
 		UserEmail,
-
+        UserHash,
+        UserSalt,
 		IsEmailVerified,
 		CreatedDateTime
 	FROM	[Account].[UserVault]
