@@ -72,9 +72,28 @@ namespace MvcApp.Services
         }
         public async Task<ApiResult<bool>> UpdateUser(UserModel userModel)
         {
-            var data = await _Repo.AccountUserUpdate(_Mapper.Map<UserApo>(userModel));
-            var result = data;
-            return result;
+            // 1) Grab the current, fully hydrated user from the repo
+            var existingResult = await _Repo.AccountUserGet(userModel.UserId);
+            if (!existingResult.IsSuccessful)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = "User not found"
+                };
+            }
+
+            var userToUpdate = existingResult.Value!;   // this has the real UserHash, UserSalt, flags, etc.
+
+            // 2) Overwrite only what you mean to change
+            userToUpdate.UserName = userModel.UserName;
+            userToUpdate.UserEmail = userModel.UserEmail;
+
+            // 3) Call update—now the DAL sees a complete object, and your stored proc can happily
+            //    check duplicates (skipping this record) and update just the name & email.
+            var updateResult = await _Repo.AccountUserUpdate(userToUpdate);
+            return updateResult;
         }
         public async Task<ApiResult<bool>> VerifyUser(int userId)
         {
