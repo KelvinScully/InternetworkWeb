@@ -35,6 +35,8 @@ namespace MvcApp.Services
         // User N User Role
         Task<ApiResult<bool>> InsertUserNUserRole(int userId, int userRoleId);
         Task<ApiResult<bool>> DeleteUserNUserRole(int userId, int userRoleId);
+
+        Task SignOutUserAsync();
     }
     public class AccountService(IAccountRepoService repo, IMapper mapper, IHttpContextAccessor httpContextAccessor) : IAccountService
     {
@@ -70,9 +72,28 @@ namespace MvcApp.Services
         }
         public async Task<ApiResult<bool>> UpdateUser(UserModel userModel)
         {
-            var data = await _Repo.AccountUserUpdate(_Mapper.Map<UserApo>(userModel));
-            var result = data;
-            return result;
+            // 1) Grab the current, fully hydrated user from the repo
+            var existingResult = await _Repo.AccountUserGet(userModel.UserId);
+            if (!existingResult.IsSuccessful)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = "User not found"
+                };
+            }
+
+            var userToUpdate = existingResult.Value!;   // this has the real UserHash, UserSalt, flags, etc.
+
+            // 2) Overwrite only what you mean to change
+            userToUpdate.UserName = userModel.UserName;
+            userToUpdate.UserEmail = userModel.UserEmail;
+
+            // 3) Call update—now the DAL sees a complete object, and your stored proc can happily
+            //    check duplicates (skipping this record) and update just the name & email.
+            var updateResult = await _Repo.AccountUserUpdate(userToUpdate);
+            return updateResult;
         }
         public async Task<ApiResult<bool>> VerifyUser(int userId)
         {
@@ -180,6 +201,29 @@ namespace MvcApp.Services
             await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
             {
                 IsPersistent = rememberMe
+            });
+        }
+
+        public async Task SignOutUserAsync()
+        {
+            var context = _httpContextAccessor.HttpContext!;
+            await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var claims = new List<Claim>
+            {
+                new Claim("Userid", "0"),
+                new Claim("Username", "Guest"),
+                new Claim("email", ""),
+                new Claim(ClaimTypes.Role, "Guest"),
+            };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            context.User = principal;
+            await context.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
+            {
+                IsPersistent = false
             });
         }
     }

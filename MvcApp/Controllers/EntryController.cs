@@ -33,6 +33,14 @@ namespace MvcApp.Areas.Account.Controllers
             return View();
         }
 
+        [HttpGet("NoRole")]
+        [AllowAnonymous]
+        public IActionResult NoRole()
+        {
+            return View();
+        }
+
+
         // =======================
         // Form Actions
         // =======================
@@ -98,6 +106,13 @@ namespace MvcApp.Areas.Account.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        [HttpPost("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _Service.SignOutUserAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

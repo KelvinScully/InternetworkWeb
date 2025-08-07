@@ -405,6 +405,8 @@ namespace BusinessLogicLayer.Services
                     };
                 }
 
+                dalResult.Value.UserRoles = (await _Dal.UserNUserRoleGet(dalResult.Value.UserId)).Value;
+
                 return new ApiResult<UserApo>
                 {
                     IsSuccessful = true,

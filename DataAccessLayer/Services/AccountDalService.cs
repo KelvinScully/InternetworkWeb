@@ -260,7 +260,7 @@ namespace DataAccessLayer.Services
 
             try
             {
-                var isDBSuccessful = await DeleteSqlAsync("Account.SpUserVaultDelete", parameters);
+                var isDBSuccessful = await DeleteSqlAsync("Account.SpUserVaultDeleteSoft", parameters);
 
                 return new ApiResult<bool>
                 {
@@ -419,7 +419,7 @@ namespace DataAccessLayer.Services
 
             try
             {
-                var isDBSuccessful = await DeleteSqlAsync("Account.SpUserVaultDelete", parameters);
+                var isDBSuccessful = await DeleteSqlAsync("Account.SpUserRoleDeleteSoft", parameters);
 
                 return new ApiResult<bool>
                 {
@@ -442,10 +442,11 @@ namespace DataAccessLayer.Services
         // User N User Role
         public async Task<ApiResult<List<UserRoleApo>>> UserNUserRoleGet(int userId)
         {
+            // PASS UserId first, then zero out UserRoleId
             SqlParameter[] parameters =
             [
-                new("@UserRoleId", userId),
-                new("@UserId", SqlDbType.Int) { Value = 0 }
+                new("@UserId",     userId),
+                new("@UserRoleId", SqlDbType.Int) { Value = 0 }
             ];
 
             Dictionary<string, string> propertyMap = new()
@@ -480,7 +481,7 @@ namespace DataAccessLayer.Services
         {
             SqlParameter[] parameters =
             [
-                new("@UserId", userId),
+                new("@UserId",     userId),
                 new("@UserRoleId", userRoleId)
             ];
 
@@ -514,21 +515,33 @@ namespace DataAccessLayer.Services
         }
         public async Task<ApiResult<bool>> UserNUserRoleInsert(int userId, int UserRoleId)
         {
-            SqlParameter[] parameters =
-            [
-                new("@UserId", userId),
-                new("@UserRoleId", UserRoleId)
-            ];
+            if (userId == 0 || UserRoleId == 0)
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = "Ids must be positive"
+                };
+
+            var parameters = new[]
+            {
+                new SqlParameter("@UserId",     userId),
+                new SqlParameter("@UserRoleId", UserRoleId)
+            };
 
             try
             {
-                var isDBSuccessful = await DeleteSqlAsync("Account.SpUserVaultNRoleGet", parameters);
+                var isDBSuccessful = await InsertSqlAsync(
+                    "Account.SpUserVaultNRoleInsert",
+                    parameters);
 
                 return new ApiResult<bool>
                 {
-                    IsSuccessful = true,
+                    IsSuccessful = isDBSuccessful,
                     Value = isDBSuccessful,
-                    Message = $"Object Inserted"
+                    Message = isDBSuccessful
+                                     ? "Role assigned"
+                                     : "No rows inserted"
                 };
             }
             catch (Exception ex)
@@ -537,7 +550,7 @@ namespace DataAccessLayer.Services
                 {
                     IsSuccessful = false,
                     Value = false,
-                    Message = $"Error in the Database: {ex}"
+                    Message = $"DB Error: {ex.Message}"
                 };
             }
         }
@@ -567,6 +580,33 @@ namespace DataAccessLayer.Services
                     IsSuccessful = false,
                     Value = false,
                     Message = $"Error in the Database: {ex}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> UserRestore(int userId)
+        {
+            try
+            {
+                var isSuccess = await UpdateSqlAsync(
+                    "Account.SpUserVaultRestore",
+                    new[]
+                    {
+                new SqlParameter("@UserId", userId)
+                    });
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = true,
+                    Value = isSuccess,
+                    Message = isSuccess ? "User Restored" : "Restore Failed"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = $"DB Error: {ex.Message}"
                 };
             }
         }
