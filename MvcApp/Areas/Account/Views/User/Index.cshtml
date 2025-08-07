@@ -1,69 +1,85 @@
 ﻿@using MvcApp.Areas.Account.Models
-@model List<UserModel>;
+@model List<UserModel>
 @{
     ViewData["Title"] = "User Management";
 }
+
 <div class="container-fluid">
     <div class="row">
-        <nav class="col-md-1 d-none d-md-block sidebar">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar border-end vh-100 p-3">
             @await Html.PartialAsync("../Shared/SidebarNav.cshtml", "Index User")
         </nav>
-        <div class="col-xl-10 px-4">
-            <div class="row">
-                <div class="col-6"><h1>@ViewData["Title"]</h1></div>
-                <div class="col-6 text-end">
-                    @if (Model.Count > 0)
+
+        <!-- Main content -->
+        <main class="col-md-10 ms-sm-auto px-4 pt-4">
+            <div class="text-center mb-4">
+                <h1 class="fw-bold text-primary">@ViewData["Title"]</h1>
+                <h4 class="text-muted">Manage registered users and their roles</h4>
+            </div>
+
+            @if (Model.Count > 0)
+            {
+                <div class="text-end mb-3">
+                    @if (Model[0].ShowInactive)
                     {
-                        @if (Model[0].ShowInactive)
-                        {
-                            <a asp-action="Index" asp-route-ShowInactive="false" class="btn btn-secondary">Hide Deleted</a>
-                        }
-                        else
-                        {
-                            <a asp-action="Index" asp-route-ShowInactive="true" class="btn btn-secondary">Show Deleted</a>
-                        }
+                        <a asp-action="Index" asp-route-ShowInactive="false" class="btn btn-outline-secondary">Hide Deleted</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Index" asp-route-ShowInactive="true" class="btn btn-outline-secondary">Show Deleted</a>
                     }
                 </div>
+            }
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">👥 User List</h5>
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Roles</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model)
+                            {
+                                <tr>
+                                    <td>@user.UserName</td>
+                                    <td>@user.UserEmail</td>
+                                    <td>
+                                        @if (user.UserRoles != null && user.UserRoles.Any())
+                                        {
+                                            @string.Join(", ", user.UserRoles.Select(r => r.UserRoleName))
+                                        }
+                                        else
+                                        {
+                                            <em>— none —</em>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-sm btn-primary me-1">Edit</a>
+                                        <a asp-action="Assign" asp-route-id="@user.UserId" class="btn btn-sm btn-info me-1">Assign Roles</a>
+                                        @if (user.IsActive)
+                                        {
+                                            <form asp-action="Delete" asp-route-id="@user.UserId" method="post" class="d-inline">
+                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                            </form>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Roles</th>              <!-- ← new column -->
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var user in Model)
-                    {
-                        <tr>
-                            <td>@user.UserName</td>
-                            <td>@user.UserEmail</td>
-                            <td>
-                                @if (user.UserRoles != null && user.UserRoles.Any())
-                                {
-                                    @string.Join(", ", user.UserRoles.Select(r => r.UserRoleName))
-                                }
-                                else
-                                {
-                                    <em>— none —</em>
-                                }
-                            </td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-sm btn-primary">Edit</a>
-                                <a asp-action="Assign" asp-route-id="@user.UserId" class="btn btn-sm btn-info">Assign Roles</a>
-                                @if (user.IsActive)
-                                {
-                                    <form asp-action="Delete" asp-route-id="@user.UserId" method="post" class="d-inline">
-                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                    </form>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+
+            <div class="alert alert-info text-center shadow-sm" role="alert">
+                <strong>Note:</strong> This page allows administrators to manage user accounts and assign roles.
+            </div>
+        </main>
     </div>
 </div>
