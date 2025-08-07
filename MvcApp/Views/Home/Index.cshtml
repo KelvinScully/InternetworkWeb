@@ -1,7 +1,90 @@
 ﻿@model MvcApp.Areas.Inventory.Models.ItemStatusModel
 
+
 <div class="text-center">
     <h1 class="display-4">Welcome to Internetwork Web</h1>
     <p>This platform is designed to manage user accounts, inventory, and system operations in an organized and efficient way.</p>
     <p>Use the navigation menu to access different modules such as Inventory and Account management.</p>
+
+<!-- Main container -->
+<div class="container mt-5">
+
+    <!-- Hero Section -->
+    <div class="text-center py-5 bg-light rounded shadow-sm mb-5">
+        <h1 class="display-3 fw-bold text-primary">Welcome to AccessFlow</h1>
+        <p class="lead mt-3 mb-4">
+            A secure role-based access management platform for inventory, users, and audits — built with ASP.NET Core MVC.
+        </p>
+        <a href="/Inventory" class="btn btn-primary btn-lg px-4 me-2">Inventory</a>
+        <a href="/Account" class="btn btn-outline-secondary btn-lg px-4">My Account</a>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row text-center mb-5">
+        <!-- Role-Based Access -->
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="bi bi-person-lock display-4 text-primary mb-3"></i>
+                    <h5 class="card-title">Role Access</h5>
+                    <p class="card-text">Secure access with user roles and permissions.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory -->
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="bi bi-box-seam display-4 text-success mb-3"></i>
+                    <h5 class="card-title">Inventory</h5>
+                    <p class="card-text">Add, update, and manage item stock.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="bi bi-speedometer2 display-4 text-warning mb-3"></i>
+                    <h5 class="card-title">Admin Panel</h5>
+                    <p class="card-text">Monitor activity and manage users.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Audit Logs -->
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="bi bi-journal-text display-4 text-danger mb-3"></i>
+                    <h5 class="card-title">Audit Logs</h5>
+                    <p class="card-text">Track user actions and system changes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="bg-white p-5 rounded shadow-sm">
+                <h3 class="text-center mb-4 text-dark">About the Project</h3>
+                <p class="fs-5">
+                    <strong>AccessFlow</strong> is a full-stack web application developed by Team 5 for the COSC-3351 Internet Programming course.
+                    It demonstrates secure login, role-based authorization, inventory management, and audit tracking. The system is built using
+                    ASP.NET Core MVC and SQL Server, with a focus on clean architecture and responsive design.
+                </p>
+                <ul class="list-unstyled mt-3 fs-5">
+                    <li>✔ Role-based access control</li>
+                    <li>✔ Inventory CRUD functionality</li>
+                    <li>✔ Admin dashboard with logs</li>
+                    <li>✔ Secure database integration</li>
+                    <li>✔ GitHub version control and cloud deployment</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
 </div>
