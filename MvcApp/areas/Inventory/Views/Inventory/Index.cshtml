@@ -2,90 +2,101 @@
     ViewData["Title"] = "Inventory Landing";
 }
 
-<div class="container py-5">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
-            <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Inventory</li>
-        </ol>
-    </nav>
 
-    <!-- Header -->
-    <div class="text-center mb-4">
-        <h1 class="fw-bold text-success">@ViewData["Title"]</h1>
-        <p class="lead">
-            The Inventory module is designed to help authorized users manage system items efficiently. Although this dashboard was not fully implemented, its structure and planned functionalities are outlined below.
-        </p>
-    </div>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar border-end vh-100 p-3">
+            @await Html.PartialAsync("../Shared/SidebarNav.cshtml", "Index")
+        </nav>
 
-    <!-- Quick Info Summary -->
-    <div class="row text-center mb-5">
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <h6 class="text-muted">Planned Items</h6>
-                    <h2 class="text-primary fw-bold">+120</h2>
-                    <p class="mb-0">Total Inventory Records</p>
+        <!-- Main Content -->
+        <main class="col-md-10 px-4 pt-4">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-light p-2 rounded shadow-sm">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Inventory</li>
+                </ol>
+            </nav>
+
+            <!-- Header -->
+            <div class="text-center mb-4">
+                <h1 class="fw-bold text-success">@ViewData["Title"]</h1>
+                <p class="lead">
+                    The Inventory module is designed to help authorized users manage system items efficiently. Although this dashboard was not fully implemented, its structure and planned functionalities are outlined below.
+                </p>
+            </div>
+
+            <!-- Quick Info Summary -->
+            <div class="row text-center mb-5">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-muted">Planned Items</h6>
+                            <h2 class="text-primary fw-bold">+120</h2>
+                            <p class="mb-0">Total Inventory Records</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-muted">Categories</h6>
+                            <h2 class="text-success fw-bold">6</h2>
+                            <p class="mb-0">Product Types</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-muted">Integration</h6>
+                            <h2 class="text-warning fw-bold">Pending</h2>
+                            <p class="mb-0">Audit Log Sync</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <h6 class="text-muted">Categories</h6>
-                    <h2 class="text-success fw-bold">6</h2>
-                    <p class="mb-0">Product Types</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <h6 class="text-muted">Integration</h6>
-                    <h2 class="text-warning fw-bold">Pending</h2>
-                    <p class="mb-0">Audit Log Sync</p>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Main Cards -->
-    <div class="row g-4">
-        <!-- Inventory Ops -->
-        <div class="col-md-6">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">📦 Inventory Operations</h5>
-                    <ul class="list-unstyled">
-                        <li>✔ View and list items</li>
-                        <li>✔ Create new inventory entries</li>
-                        <li>✔ Edit and delete existing items</li>
-                        <li>✔ Filter by category, location, or status</li>
-                    </ul>
+            <!-- Main Cards -->
+            <div class="row g-4">
+                <!-- Inventory Ops -->
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">📦 Inventory Operations</h5>
+                            <ul class="list-unstyled">
+                                <li>✔ View and list items</li>
+                                <li>✔ Create new inventory entries</li>
+                                <li>✔ Edit and delete existing items</li>
+                                <li>✔ Filter by category, location, or status</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Future plans -->
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">🚀 Future Enhancements</h5>
+                            <ul class="list-unstyled">
+                                <li>✔ Low-stock alert system</li>
+                                <li>✔ Stock analytics dashboard</li>
+                                <li>✔ Audit log integration for item changes</li>
+                            </ul>
+                            <p class="text-muted small mt-3">Note: These features were designed but not implemented due to time limitations.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Future plans -->
-        <div class="col-md-6">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">🚀 Future Enhancements</h5>
-                    <ul class="list-unstyled">
-                        <li>✔ Low-stock alert system</li>
-                        <li>✔ Stock analytics dashboard</li>
-                        <li>✔ Audit log integration for item changes</li>
-                    </ul>
-                    <p class="text-muted small mt-3">Note: These features were designed but not implemented due to time limitations.</p>
-                </div>
+            <!-- Notice -->
+            <div class="alert alert-info text-center mt-5 shadow-sm" role="alert">
+                <strong>Note:</strong> This page represents planned functionalities only.
             </div>
-        </div>
-    </div>
-
-    <!-- Notice -->
-    <div class="alert alert-info text-center mt-5 shadow-sm" role="alert">
-        <strong>Note:</strong> This page represents planned functionalities only.
+        </main>
     </div>
 </div>
 
