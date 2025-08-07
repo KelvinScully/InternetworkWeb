@@ -135,3 +135,23 @@ BEGIN
 
 END;
 -- =============================================
+GO;
+-- =============================================
+-- Author:		<Vasquez, Dillon>
+-- Create date: 08/07/2025
+-- Description:	Store Procedure: Account User Role Activate
+-- =============================================
+
+CREATE OR ALTER PROCEDURE [Account].[SpUserRoleActivate]
+	@UserRoleId		INT
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	UPDATE	[Account].[UserRole]
+	SET		IsActive = 1
+	WHERE	UserRoleId = @UserRoleId
+
+END;
+
+-- =============================================

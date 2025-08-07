@@ -21,6 +21,7 @@ namespace MvcApp.Services
         Task<ApiResult<bool>> UpdateUser(UserModel userModel);
         Task<ApiResult<bool>> VerifyUser(int userId);
         Task<ApiResult<bool>> DeleteUser(int userId);
+        Task<ApiResult<bool>> ActivateUser(int userId);
 
         Task<UserModel> Register(LoginRegisterModel user);
         Task<UserModel> Authenticate(LoginRegisterModel user);
@@ -31,6 +32,7 @@ namespace MvcApp.Services
         Task<ApiResult<bool>> InsertUserRole(UserRoleModel userRoleModel);
         Task<ApiResult<bool>> UpdateUserRole(UserRoleModel userRoleModel);
         Task<ApiResult<bool>> DeleteUserRole(int userRoleId);
+        Task<ApiResult<bool>> ActivateUserRole(int userRoleId);
 
         // User N User Role
         Task<ApiResult<bool>> InsertUserNUserRole(int userId, int userRoleId);
@@ -107,6 +109,12 @@ namespace MvcApp.Services
             var result = data;
             return result;
         }
+        public async Task<ApiResult<bool>> ActivateUser(int userId)
+        {
+            var data = await _Repo.AccountUserActivate(userId);
+            var result = data;
+            return result;
+        }
 
         public async Task<UserModel> Register(LoginRegisterModel user)
         {
@@ -161,6 +169,12 @@ namespace MvcApp.Services
         public async Task<ApiResult<bool>> DeleteUserRole(int userRoleId)
         {
             var data = await _Repo.AccountUserRoleDelete(userRoleId);
+            var result = data;
+            return result;
+        }
+        public async Task<ApiResult<bool>> ActivateUserRole(int userRoleId)
+        {
+            var data = await _Repo.AccountUserRoleActivate(userRoleId);
             var result = data;
             return result;
         }

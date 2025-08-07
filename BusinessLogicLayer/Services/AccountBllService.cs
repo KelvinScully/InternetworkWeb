@@ -143,7 +143,13 @@ namespace BusinessLogicLayer.Services
         {
             try
             {
-                var dalResult = await _Dal.UserInsert(userApo);
+                // 128 Bit Salt
+                byte[] userSalt = RandomNumberGenerator.GetBytes(16);
+                // 256 Bit Hash
+                using var rfc2898 = new Rfc2898DeriveBytes(userApo.Password, userSalt, 100_000, HashAlgorithmName.SHA256);
+                byte[] userHash = rfc2898.GetBytes(32);
+
+                var dalResult = await _Dal.UserInsert(new UserApo() { UserName = userApo.UserName, UserEmail = userApo.UserEmail, UserHash = userHash, UserSalt = userSalt });
 
                 if (!dalResult.IsSuccessful)
                 {
@@ -279,6 +285,49 @@ namespace BusinessLogicLayer.Services
                     IsSuccessful = true,
                     Value = dalResult.Value,
                     Message = "Object Deleted"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = new(),
+                    Message = $"Unhandled Exception: {ex.Message}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> UserActivate(int userId)
+        {
+            if (userId == 0)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = "Id is equal to 0. Id must be a positive number"
+                };
+            }
+
+            try
+            {
+                var dalResult = await _Dal.UserActivate(userId);
+
+                if (!dalResult.IsSuccessful)
+                {
+                    return new ApiResult<bool>
+                    {
+                        IsSuccessful = false,
+                        Value = new(),
+                        Message = $"DAL Failed: {dalResult.Message}"
+                    };
+                }
+
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = true,
+                    Value = dalResult.Value,
+                    Message = "Object Activated"
                 };
             }
             catch (Exception ex)
@@ -599,6 +648,49 @@ namespace BusinessLogicLayer.Services
                     IsSuccessful = true,
                     Value = dalResult.Value,
                     Message = "Object Deleted"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = new(),
+                    Message = $"Unhandled Exception: {ex.Message}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> UserRoleActivate(int userRoleId)
+        {
+            if (userRoleId == 0)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = "Id is equal to 0. Id must be a positive number"
+                };
+            }
+
+            try
+            {
+                var dalResult = await _Dal.UserRoleActivate(userRoleId);
+
+                if (!dalResult.IsSuccessful)
+                {
+                    return new ApiResult<bool>
+                    {
+                        IsSuccessful = false,
+                        Value = new(),
+                        Message = $"DAL Failed: {dalResult.Message}"
+                    };
+                }
+
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = true,
+                    Value = dalResult.Value,
+                    Message = "Object Activated"
                 };
             }
             catch (Exception ex)

@@ -62,6 +62,8 @@ namespace DataAccessLayer.Services
                 ["UserId"] = "UserId",
                 ["UserName"] = "UserName",
                 ["UserEmail"] = "UserEmail",
+                ["UserHash"] = "UserHash",
+                ["UserSalt"] = "UserSalt",
                 ["IsEmailVerified"] = "IsEmailVerified",
                 ["IsActive"] = "IsActive"
             };
@@ -279,6 +281,34 @@ namespace DataAccessLayer.Services
                 };
             }
         }
+        public async Task<ApiResult<bool>> UserActivate(int userId)
+        {
+            SqlParameter[] parameters =
+            [
+                new("@UserId", userId)
+            ];
+
+            try
+            {
+                var isDBSuccessful = await ActivateSqlAsync("Account.SpUserVaultActivate", parameters);
+
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = true,
+                    Value = isDBSuccessful,
+                    Message = $"Object Activated"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = $"Error in the Database: {ex}"
+                };
+            }
+        }
 
         // User Role
         public async Task<ApiResult<List<UserRoleApo>>> UserRoleGet()
@@ -438,6 +468,34 @@ namespace DataAccessLayer.Services
                 };
             }
         }
+        public async Task<ApiResult<bool>> UserRoleActivate(int userRoleId)
+        {
+            SqlParameter[] parameters =
+            [
+                new("@UserRoleId", userRoleId)
+            ];
+
+            try
+            {
+                var isDBSuccessful = await ActivateSqlAsync("Account.SpUserRoleActivate", parameters);
+
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = true,
+                    Value = isDBSuccessful,
+                    Message = $"Object Activated"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = $"Error in the Database: {ex}"
+                };
+            }
+        }
 
         // User N User Role
         public async Task<ApiResult<List<UserRoleApo>>> UserNUserRoleGet(int userId)
@@ -580,33 +638,6 @@ namespace DataAccessLayer.Services
                     IsSuccessful = false,
                     Value = false,
                     Message = $"Error in the Database: {ex}"
-                };
-            }
-        }
-        public async Task<ApiResult<bool>> UserRestore(int userId)
-        {
-            try
-            {
-                var isSuccess = await UpdateSqlAsync(
-                    "Account.SpUserVaultRestore",
-                    new[]
-                    {
-                new SqlParameter("@UserId", userId)
-                    });
-                return new ApiResult<bool>
-                {
-                    IsSuccessful = true,
-                    Value = isSuccess,
-                    Message = isSuccess ? "User Restored" : "Restore Failed"
-                };
-            }
-            catch (Exception ex)
-            {
-                return new ApiResult<bool>
-                {
-                    IsSuccessful = false,
-                    Value = false,
-                    Message = $"DB Error: {ex.Message}"
                 };
             }
         }

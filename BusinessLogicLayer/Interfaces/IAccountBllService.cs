@@ -13,6 +13,7 @@ namespace BusinessLogicLayer.Interfaces
         Task<ApiResult<bool>> UserUpdate(UserApo userApo);
         Task<ApiResult<bool>> UserVerify(int userId);
         Task<ApiResult<bool>> UserDelete(int userId);
+        Task<ApiResult<bool>> UserActivate(int userId);
 
         Task<ApiResult<UserApo>> Register(UserApo user);
         Task<ApiResult<UserApo>> Authenticate(UserApo user);
@@ -23,6 +24,7 @@ namespace BusinessLogicLayer.Interfaces
         Task<ApiResult<bool>> UserRoleInsert(UserRoleApo userRoleApo);
         Task<ApiResult<bool>> UserRoleUpdate(UserRoleApo userRoleApo);
         Task<ApiResult<bool>> UserRoleDelete(int userRoleId);
+        Task<ApiResult<bool>> UserRoleActivate(int userRoleId);
 
         // User N User Role
         Task<ApiResult<bool>> UserNUserRoleInsert(int userId, int userRoleId);
