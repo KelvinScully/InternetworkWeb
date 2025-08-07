@@ -69,6 +69,12 @@
                                                 <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                             </form>
                                         }
+                                        else
+                                        {
+                                            <form asp-action="Undelete" asp-route-id="@user.UserId" method="post" class="d-inline">
+                                                <button type="submit" class="btn btn-sm btn-success">Restore</button>
+                                            </form>
+                                        }
                                     </td>
                                 </tr>
                             }
