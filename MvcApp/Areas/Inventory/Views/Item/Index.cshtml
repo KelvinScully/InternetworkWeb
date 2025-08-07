@@ -1,1 +1,37 @@
-﻿
+﻿@model List<MvcApp.Areas.Inventory.Models.ItemModel>
+
+
+<h2>Inventory Items</h2>
+
+<a asp-action="Create" class="btn btn-primary mb-3">Add New Item</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Category</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Active</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+
+        {
+            <tr>
+                <td>@item.ItemName</td>
+                <td>@item.ItemQuantity</td>
+                <td>@item.ItemCategoryName</td>
+                <td>@item.ItemLocationName</td>
+                <td>@item.ItemStatusName</td>
+                <td>@(item.IsActive ? "Yes" : "No")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ItemId" class="btn btn-sm btn-warning">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
