@@ -131,5 +131,11 @@ namespace MvcApp.Areas.Account.Controllers
             await _Service.DeleteUser(Id);
             return RedirectToAction("Index");
         }
+        [HttpPost("[area]/[controller]/Undelete/{Id}")]
+        public async Task<IActionResult> Undelete(int Id)
+        {
+            await _Service.ActivateUser(Id);
+            return RedirectToAction("Index");
+        }
     }
 }
