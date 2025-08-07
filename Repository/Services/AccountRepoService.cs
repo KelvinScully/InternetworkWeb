@@ -215,6 +215,37 @@ namespace Repository.Services
                 };
             }
         }
+        public async Task<ApiResult<bool>> AccountUserActivate(int userId)
+        {
+            try
+            {
+                var result = await _Bll.UserActivate(userId);
+                if (result.IsSuccessful)
+                {
+                    return new ApiResult<bool>
+                    {
+                        IsSuccessful = true,
+                        Value = result.IsSuccessful,
+                        Message = $"User Activated"
+                    };
+                }
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = result.IsSuccessful,
+                    Message = $"User Activate Failed"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = $"Exception: {ex.Message}"
+                };
+            }
+        }
 
         public async Task<ApiResult<UserApo>> Register(UserApo user)
         {
@@ -416,6 +447,37 @@ namespace Repository.Services
                     IsSuccessful = false,
                     Value = result.IsSuccessful,
                     Message = $"User Role Delete Failed"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = $"Exception: {ex.Message}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> AccountUserRoleActivate(int userRoleId)
+        {
+            try
+            {
+                var result = await _Bll.UserRoleActivate(userRoleId);
+                if (result.IsSuccessful)
+                {
+                    return new ApiResult<bool>
+                    {
+                        IsSuccessful = true,
+                        Value = result.IsSuccessful,
+                        Message = $"User Role Activated"
+                    };
+                }
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = result.IsSuccessful,
+                    Message = $"User Role Activate Failed"
                 };
             }
             catch (Exception ex)

@@ -291,6 +291,49 @@ namespace BusinessLogicLayer.Services
                 };
             }
         }
+        public async Task<ApiResult<bool>> UserActivate(int userId)
+        {
+            if (userId == 0)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = "Id is equal to 0. Id must be a positive number"
+                };
+            }
+
+            try
+            {
+                var dalResult = await _Dal.UserActivate(userId);
+
+                if (!dalResult.IsSuccessful)
+                {
+                    return new ApiResult<bool>
+                    {
+                        IsSuccessful = false,
+                        Value = new(),
+                        Message = $"DAL Failed: {dalResult.Message}"
+                    };
+                }
+
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = true,
+                    Value = dalResult.Value,
+                    Message = "Object Activated"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = new(),
+                    Message = $"Unhandled Exception: {ex.Message}"
+                };
+            }
+        }
 
         public async Task<ApiResult<UserApo>> Register(UserApo userApo)
         {
@@ -599,6 +642,49 @@ namespace BusinessLogicLayer.Services
                     IsSuccessful = true,
                     Value = dalResult.Value,
                     Message = "Object Deleted"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = new(),
+                    Message = $"Unhandled Exception: {ex.Message}"
+                };
+            }
+        }
+        public async Task<ApiResult<bool>> UserRoleActivate(int userRoleId)
+        {
+            if (userRoleId == 0)
+            {
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = false,
+                    Value = false,
+                    Message = "Id is equal to 0. Id must be a positive number"
+                };
+            }
+
+            try
+            {
+                var dalResult = await _Dal.UserRoleActivate(userRoleId);
+
+                if (!dalResult.IsSuccessful)
+                {
+                    return new ApiResult<bool>
+                    {
+                        IsSuccessful = false,
+                        Value = new(),
+                        Message = $"DAL Failed: {dalResult.Message}"
+                    };
+                }
+
+                return new ApiResult<bool>
+                {
+                    IsSuccessful = true,
+                    Value = dalResult.Value,
+                    Message = "Object Activated"
                 };
             }
             catch (Exception ex)

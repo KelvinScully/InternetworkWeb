@@ -13,6 +13,7 @@ namespace Repository.Interfaces
         Task<ApiResult<bool>> AccountUserUpdate(UserApo userApo);
         Task<ApiResult<bool>> AccountUserVerify(int userId);
         Task<ApiResult<bool>> AccountUserDelete(int userId);
+        Task<ApiResult<bool>> AccountUserActivate(int userId);
 
         Task<ApiResult<UserApo>> Register(UserApo user);
         Task<ApiResult<UserApo>> Authenticate(UserApo user);
@@ -23,6 +24,7 @@ namespace Repository.Interfaces
         Task<ApiResult<bool>> AccountUserRoleInsert(UserRoleApo userRoleApo);
         Task<ApiResult<bool>> AccountUserRoleUpdate(UserRoleApo userRoleApo);
         Task<ApiResult<bool>> AccountUserRoleDelete(int userRoleId);
+        Task<ApiResult<bool>> AccountUserRoleActivate(int userRoleId);
 
         // User N User Role
         Task<ApiResult<bool>> AccountUserNUserRoleInsert(int userId, int userRoleId);

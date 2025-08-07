@@ -262,3 +262,23 @@ BEGIN
 END;
 
 -- =============================================
+GO;
+-- =============================================
+-- Author:		<Vasquez, Dillon>
+-- Create date: 08/07/2025
+-- Description:	Store Procedure: Account User Vault Activate
+-- =============================================
+
+CREATE OR ALTER PROCEDURE [Account].[SpUserVaultActivate]
+	@UserId		INT
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	UPDATE	[Account].[UserVault]
+	SET		IsActive = 1
+	WHERE	UserId = @UserId
+
+END;
+
+-- =============================================

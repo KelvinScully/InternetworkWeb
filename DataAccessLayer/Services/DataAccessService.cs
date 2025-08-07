@@ -104,6 +104,9 @@ namespace DataAccessLayer.Services
 
         public Task<bool> DeleteSqlAsync(string storedProcedure, IEnumerable<SqlParameter> parameters)
             => ExecuteNonQueryAsync(storedProcedure, parameters).ContinueWith(t => t.Result > 0);
+
+        public Task<bool> ActivateSqlAsync(string storedProcedure, IEnumerable<SqlParameter> parameters)
+            => ExecuteNonQueryAsync(storedProcedure, parameters).ContinueWith(t => t.Result > 0);
         private async Task<int> ExecuteNonQueryAsync(string storedProcedure, IEnumerable<SqlParameter> parameters)
         {
             using var conn = new SqlConnection(ConnectionString);
