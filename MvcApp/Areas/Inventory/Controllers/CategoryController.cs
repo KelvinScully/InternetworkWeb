@@ -31,7 +31,7 @@ namespace MvcApp.Areas.Inventory.Controllers
             if (User.IsInRole("Guest"))
                 return RedirectToAction("Gate", "Entry");
 
-            if (!User.IsInRole("SuperAdmin") && !User.IsInRole("Admin") && !User.IsInRole("Account Manager"))
+            if (!User.IsInRole("SuperAdmin") && !User.IsInRole("Admin") && !User.IsInRole("Inventory Manager"))
                 return RedirectToAction("NoRole", "Entry");
 
             ItemCategoryModel model = new();
@@ -44,7 +44,7 @@ namespace MvcApp.Areas.Inventory.Controllers
             if (User.IsInRole("Guest"))
                 return RedirectToAction("Gate", "Entry");
 
-            if (!User.IsInRole("SuperAdmin") && !User.IsInRole("Admin") && !User.IsInRole("Account Manager"))
+            if (!User.IsInRole("SuperAdmin") && !User.IsInRole("Admin") && !User.IsInRole("Inventory Manager"))
                 return RedirectToAction("NoRole", "Entry");
 
             ItemCategoryModel model = await _Service.GetItemCategory(Id);

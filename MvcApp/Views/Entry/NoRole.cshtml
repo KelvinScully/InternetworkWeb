@@ -1,8 +1,41 @@
 ﻿@{
-    ViewData["Title"] = "No Role";
+    ViewData["Title"] = "Access Denied";
 }
+<div class="container-fluid">
+    <main class="col-md-12 px-4 pt-4">
 
-<div class="text-center">
-    <h1>@ViewData["Title"]</h1>
-    <h2>Your Account does not have the correct role for this feature</h2>
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <h1 class="fw-bold text-success">@ViewData["Title"]</h1>
+            <p class="lead">
+                Your Account does not have the correct role for this feature
+            </p>
+        </div>
+
+        <!-- Optional error message -->
+        @if (ViewData["Error"] != null && ViewData["Error"].ToString().Length > 0)
+        {
+            <div class="alert alert-danger text-center" role="alert">
+                @ViewData["Error"]
+            </div>
+        }
+
+        <!-- Placeholder for future content -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Restriction Reason</h5>
+                <p class="card-text text-muted">
+                    You account does not have access to your specified page.
+                    <br />
+                    Please contact the Account Admin for role access for your account
+                </p>
+            </div>
+        </div>
+
+        <!-- Notice -->
+        <div class="alert alert-info text-center shadow-sm" role="alert">
+            <strong>Note:</strong> This page shows up when you do not have access to a page due to role restrictions
+        </div>
+    </main>
 </div>
+

@@ -161,11 +161,13 @@ namespace BusinessLogicLayer.Services
                     };
                 }
 
+                await UserNUserRoleInsert((await UserGet(userApo.UserName)).Value.UserId, 2);
+
                 return new ApiResult<bool>
                 {
                     IsSuccessful = true,
                     Value = dalResult.Value,
-                    Message = "Object Updated"
+                    Message = "Object Inserted"
                 };
             }
             catch (Exception ex)
@@ -376,6 +378,8 @@ namespace BusinessLogicLayer.Services
                         Message = $"DAL Failed: {dalResult.Message}"
                     };
                 }
+
+                await UserNUserRoleInsert((await UserGet(userApo.UserName)).Value.UserId, 2);
 
                 return new ApiResult<UserApo>
                 {
