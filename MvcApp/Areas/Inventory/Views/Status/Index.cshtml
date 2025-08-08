@@ -1,7 +1,12 @@
-﻿@using MvcApp.Areas.Inventory.Models
+﻿@using System.Security.Claims 
+@using MvcApp.Areas.Inventory.Models
 @model List<ItemStatusModel>;
 @{
     ViewData["Title"] = "Status Management";
+    var roles = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+
+    var keywords = new[] { "SuperAdmin", "Admin", "Account Manager" };
+    bool isAllowed = roles.Any(role => keywords.Any(keyword => role.Contains(keyword)));
 }
 <div class="container-fluid">
     <div class="row">
@@ -44,22 +49,29 @@
                         <tbody>
                             @if (Model != null || Model.Count > 0)
                             {
-                                @foreach (var status in Model)
+                                foreach (var status in Model)
                                 {
                                     <tr>
                                         <td>@status.ItemStatusName</td>
-                                        <td class="text-center">
-                                            <a class="btn btn-sm btn-primary me-1" asp-area="Inventory" asp-controller="Status" asp-action="Edit" asp-route-id="@status.ItemStatusId">Edit</a>
-                                            @if (status.IsActive)
-                                            {
-                                                <form class="d-inline" asp-area="Inventory" asp-controller="Status" asp-action="Delete" asp-route-id="@status.ItemStatusId" method="post">
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete"
-                                                            onclick="return confirm('Are you sure you want to delete this status?');">
-                                                        <i class="bi bi-trash"></i> Delete
-                                                    </button>
-                                                </form>
-                                            }
-                                        </td>
+                                        @if (isAllowed)
+                                        {
+                                            <td class="text-center">
+                                                <a class="btn btn-sm btn-primary me-1" asp-area="Inventory" asp-controller="Status" asp-action="Edit" asp-route-id="@status.ItemStatusId">Edit</a>
+                                                @if (status.IsActive)
+                                                {
+                                                    <form class="d-inline" asp-area="Inventory" asp-controller="Status" asp-action="Delete" asp-route-id="@status.ItemStatusId" method="post">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete"
+                                                                onclick="return confirm('Are you sure you want to delete this status?');">
+                                                            <i class="bi bi-trash"></i> Delete
+                                                        </button>
+                                                    </form>
+                                                }
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td></td>
+                                        }
                                     </tr>
                                 }
                             }

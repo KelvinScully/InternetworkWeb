@@ -1,7 +1,12 @@
-﻿@using MvcApp.Areas.Account.Models
+﻿@using System.Security.Claims
+@using MvcApp.Areas.Account.Models
 @model List<UserRoleModel>
 @{
     ViewData["Title"] = "Role Management";
+    var roles = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+
+    var keywords = new[] { "SuperAdmin", "Admin", "Account Manager" };
+    bool isAllowed = roles.Any(role => keywords.Any(keyword => role.Contains(keyword)));
 }
 
 <div class="container-fluid">
@@ -47,15 +52,22 @@
                             {
                                 <tr>
                                     <td>@role.UserRoleName</td>
-                                    <td class="text-center">
-                                        <a asp-action="Edit" asp-route-id="@role.UserRoleId" class="btn btn-sm btn-primary me-1">Edit</a>
-                                        @if (role.IsActive)
-                                        {
-                                            <form asp-action="Delete" asp-route-id="@role.UserRoleId" method="post" class="d-inline">
-                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                            </form>
-                                        }
-                                    </td>
+                                    @if (isAllowed)
+                                    {
+                                        <td class="text-center">
+                                            <a asp-action="Edit" asp-route-id="@role.UserRoleId" class="btn btn-sm btn-primary me-1">Edit</a>
+                                            @if (role.IsActive)
+                                            {
+                                                <form asp-action="Delete" asp-route-id="@role.UserRoleId" method="post" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                </form>
+                                            }
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
                                 </tr>
                             }
                         </tbody>

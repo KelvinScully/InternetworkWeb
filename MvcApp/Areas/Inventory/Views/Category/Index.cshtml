@@ -1,7 +1,12 @@
-﻿@using MvcApp.Areas.Inventory.Models
+﻿@using System.Security.Claims 
+@using MvcApp.Areas.Inventory.Models
 @model List<ItemCategoryModel>
 @{
     ViewData["Title"] = "Category Management";
+    var roles = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+
+    var keywords = new[] { "SuperAdmin", "Admin", "Account Manager" };
+    bool isAllowed = roles.Any(role => keywords.Any(keyword => role.Contains(keyword)));
 }
 <div class="container-fluid">
     <div class="row">
@@ -48,8 +53,10 @@
                                 {
                                     <tr>
                                         <td>@Category.ItemCategoryName</td>
-                                        <td>
-                                            <a class="btn btn-sm btn-primary me-1" asp-area="Inventory" asp-controller="Category" asp-action="Edit" asp-route-id="@Category.ItemCategoryId">Edit</a>
+                                        @if (isAllowed)
+                                        {
+                                            <td>
+                                                <a class="btn btn-sm btn-primary me-1" asp-area="Inventory" asp-controller="Category" asp-action="Edit" asp-route-id="@Category.ItemCategoryId">Edit</a>
                                                 @if (Category.IsActive)
                                                 {
                                                     <form class="d-inline" asp-area="Inventory" asp-controller="Category" asp-action="Delete" asp-route-id="@Category.ItemCategoryId" method="post">
@@ -59,7 +66,12 @@
                                                         </button>
                                                     </form>
                                                 }
-                                        </td>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td></td>
+                                        }
                                     </tr>
                                 }
                             }
