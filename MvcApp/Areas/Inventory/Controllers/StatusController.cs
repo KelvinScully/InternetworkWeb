@@ -46,8 +46,25 @@ namespace MvcApp.Areas.Inventory.Controllers
             if (!ModelState.IsValid)
                 return View("Create", model);
 
-            await _Service.InsertItemStatus(model);
-            return RedirectToAction("Index");
+            // --- Pre-check for duplicate Status name (case + trim insensitive)
+            var existing = await _Service.GetItemStatus(true); // include inactive to fully enforce uniqueness
+            if (existing.Any(x =>
+                string.Equals(x.ItemStatusName?.Trim(), model.ItemStatusName?.Trim(), StringComparison.OrdinalIgnoreCase)))
+            {
+                ModelState.AddModelError(nameof(model.ItemStatusName), "That Status name already exists.");
+                return View("Create", model);
+            }
+
+            var result = await _Service.InsertItemStatus(model);
+            if (!result.IsSuccessful)
+            {
+                ModelState.AddModelError(string.Empty, string.IsNullOrWhiteSpace(result.Message)
+                    ? "Could not create the Status."
+                    : result.Message);
+                return View("Create", model);
+            }
+
+            return RedirectToAction("Index", new { ShowInactive = false });
         }
 
         [HttpPost("[area]/[controller]/Update")]
@@ -57,14 +74,14 @@ namespace MvcApp.Areas.Inventory.Controllers
                 return View("Edit", model);
 
             await _Service.UpdateItemStatus(model);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { ShowInactive = false });
         }
 
         [HttpPost("[area]/[controller]/Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
             await _Service.DeleteItemStatus(Id);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { ShowInactive = false });
         }
     }
 }
