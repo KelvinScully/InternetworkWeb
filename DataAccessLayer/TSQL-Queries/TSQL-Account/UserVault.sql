@@ -68,7 +68,7 @@ BEGIN
         UserHash,
         UserSalt,
 		IsEmailVerified,
-		CreatedDateTime
+		IsActive
 	FROM	[Account].[UserVault]
 	WHERE	UserName = @UserName
 END;

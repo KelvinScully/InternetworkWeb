@@ -73,22 +73,43 @@
                                     </td>
                                     @if (isAllowed || userIdInt == user.UserId)
                                     {
-                                        <td class="text-center">
-                                            <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-sm btn-primary me-1">Edit</a>
-                                            <a asp-action="Assign" asp-route-id="@user.UserId" class="btn btn-sm btn-info me-1">Assign Roles</a>
-                                            @if (user.IsActive)
-                                            {
-                                                <form asp-action="Delete" asp-route-id="@user.UserId" method="post" class="d-inline">
-                                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                                </form>
-                                            }
-                                            else
-                                            {
-                                                <form asp-action="Undelete" asp-route-id="@user.UserId" method="post" class="d-inline">
-                                                    <button type="submit" class="btn btn-sm btn-success">Restore</button>
-                                                </form>
-                                            }
-                                        </td>
+                                        @if (userIdInt == user.UserId)
+                                        {
+                                            <td class="text-center">
+                                                <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-sm btn-primary me-1">Edit</a>
+                                                @if (user.IsActive)
+                                                {
+                                                    <form asp-action="Delete" asp-route-id="@user.UserId" method="post" class="d-inline">
+                                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                    </form>
+                                                }
+                                                else
+                                                {
+                                                    <form asp-action="Undelete" asp-route-id="@user.UserId" method="post" class="d-inline">
+                                                        <button type="submit" class="btn btn-sm btn-success">Restore</button>
+                                                    </form>
+                                                }
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center">
+                                                <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-sm btn-primary me-1">Edit</a>
+                                                <a asp-action="Assign" asp-route-id="@user.UserId" class="btn btn-sm btn-info me-1">Assign Roles</a>
+                                                @if (user.IsActive)
+                                                {
+                                                    <form asp-action="Delete" asp-route-id="@user.UserId" method="post" class="d-inline">
+                                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                    </form>
+                                                }
+                                                else
+                                                {
+                                                    <form asp-action="Undelete" asp-route-id="@user.UserId" method="post" class="d-inline">
+                                                        <button type="submit" class="btn btn-sm btn-success">Restore</button>
+                                                    </form>
+                                                }
+                                            </td>
+                                        }
                                     }
                                     else
                                     {

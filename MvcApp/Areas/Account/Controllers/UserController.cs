@@ -62,6 +62,12 @@ namespace MvcApp.Areas.Account.Controllers
         [HttpGet]
         public async Task<IActionResult> Assign(int Id)
         {
+            if (User.IsInRole("Guest"))
+                return RedirectToAction("Gate", "Entry");
+
+            if (!User.IsInRole("SuperAdmin") && !User.IsInRole("Admin") && !User.IsInRole("Account Manager"))
+                return RedirectToAction("NoRole", "Entry");
+
             var user = await _Service.GetUser(Id);
             var allRoles = await _Service.GetUserRole(false);
 

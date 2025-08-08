@@ -458,6 +458,16 @@ namespace BusinessLogicLayer.Services
                     };
                 }
 
+                if (!dalResult.Value.IsActive)
+                {
+                    return new ApiResult<UserApo>
+                    {
+                        IsSuccessful = false,
+                        Value = new(),
+                        Message = $"User is deleted"
+                    };
+                }
+
                 dalResult.Value.UserRoles = (await _Dal.UserNUserRoleGet(dalResult.Value.UserId)).Value;
 
                 return new ApiResult<UserApo>
