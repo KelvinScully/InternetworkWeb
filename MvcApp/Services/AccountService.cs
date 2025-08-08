@@ -201,9 +201,9 @@ namespace MvcApp.Services
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Email, user.UserEmail)
+                new Claim("Userid", user.UserId.ToString()),
+                new Claim("Username", user.UserName.ToString()),
+                new Claim("email", user.UserEmail.ToString())
             };
 
             foreach (var role in user.UserRoles)

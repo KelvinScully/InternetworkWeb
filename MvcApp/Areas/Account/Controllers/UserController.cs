@@ -38,8 +38,17 @@ namespace MvcApp.Areas.Account.Controllers
         [HttpGet("[area]/[controller]/Edit/{Id}")]
         public async Task<IActionResult> Edit(int Id)
         {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "Userid")?.Value;
+            var userIdInt = int.Parse(userId);
+
             if (User.IsInRole("Guest"))
                 return RedirectToAction("Gate", "Entry");
+
+            if (userIdInt == Id)
+            {
+                var loggedInmodel = await _Service.GetUser(Id);
+                return View(loggedInmodel);
+            }
 
             if (!User.IsInRole("SuperAdmin") && !User.IsInRole("Admin") && !User.IsInRole("Account Manager"))
                 return RedirectToAction("NoRole", "Entry");
@@ -125,7 +134,14 @@ namespace MvcApp.Areas.Account.Controllers
         [HttpPost("[area]/[controller]/Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "Userid")?.Value;
+            var userIdInt = int.Parse(userId);
             await _Service.DeleteUser(Id);
+            if (userIdInt == Id)
+            {
+                await _Service.SignOutUserAsync(); 
+                return RedirectToAction("Index", "Home", new { area = "" });
+            }
             return RedirectToAction("Index");
         }
         [HttpPost("[area]/[controller]/Undelete/{Id}")]

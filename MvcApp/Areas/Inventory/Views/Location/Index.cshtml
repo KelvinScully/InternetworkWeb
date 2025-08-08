@@ -25,13 +25,16 @@
             @if (Model.Count > 0)
             {
                 <div class="text-end mb-3">
-                    @if (Model[0].ShowInactive)
+                    @if (isAllowed)
                     {
-                        <a asp-action="Index" asp-route-ShowInactive="false" class="btn btn-outline-secondary">Hide Deleted</a>
-                    }
-                    else
-                    {
-                        <a asp-action="Index" asp-route-ShowInactive="true" class="btn btn-outline-secondary">Show Deleted</a>
+                        @if (Model[0].ShowInactive)
+                        {
+                            <a asp-action="Index" asp-route-ShowInactive="false" class="btn btn-outline-secondary">Hide Deleted</a>
+                        }
+                        else
+                        {
+                            <a asp-action="Index" asp-route-ShowInactive="true" class="btn btn-outline-secondary">Show Deleted</a>
+                        }
                     }
                 </div>
             }
