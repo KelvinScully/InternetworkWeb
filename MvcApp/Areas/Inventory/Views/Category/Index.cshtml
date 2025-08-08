@@ -5,7 +5,7 @@
     ViewData["Title"] = "Category Management";
     var roles = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
 
-    var keywords = new[] { "SuperAdmin", "Admin", "Account Manager" };
+    var keywords = new[] { "SuperAdmin", "Admin", "Inventory Manager" };
     bool isAllowed = roles.Any(role => keywords.Any(keyword => role.Contains(keyword)));
 }
 <div class="container-fluid">
