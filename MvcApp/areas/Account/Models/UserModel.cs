@@ -15,7 +15,7 @@ namespace MvcApp.Areas.Account.Models
         public bool IsEmailVerified { get; set; }
         public bool IsActive { get; set; }
         public bool RememberMe { get; set; } = false;
-        public List<UserRoleApo> UserRoles { get; set; } = [];
+        public List<UserRoleModel> UserRoles { get; set; } = [];
         public bool ShowInactive { get; set; }
         public bool IsDefault()
         {

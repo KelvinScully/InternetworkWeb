@@ -1,7 +1,22 @@
-﻿@model MvcApp.Areas.Account.Models.AssignRolesModel
-
+﻿@using System.Security.Claims
+@model MvcApp.Areas.Account.Models.AssignRolesModel
 @{
     ViewData["Title"] = "Assign Roles to " + Model.UserName;
+
+    // Rules:
+    // 1) No one can assign SuperAdmin, no one can delete TestSuperUser1
+    // 2) Only Admin or lower (>= rank of "Admin")
+    // 3) You can only assign your rank or lower (i.e., worse/equal privilege)
+    string[] roleOrder = { "SuperAdmin", "Admin", "Account Admin", "Inventory Admin", "User" };
+    int Rank(string r) => Array.IndexOf(roleOrder, r) >= 0 ? Array.IndexOf(roleOrder, r) : int.MaxValue;
+    var myRank = User.Claims
+        .Where(c => c.Type == ClaimTypes.Role)
+        .Select(c => Rank(c.Value))
+        .DefaultIfEmpty(int.MaxValue)
+        .Min();
+
+    int adminRank = Rank("Admin");
+
 }
 
 <div class="container-fluid">
@@ -34,12 +49,18 @@
                             <tbody>
                                 @foreach (var role in Model.Roles)
                                 {
+                                    var rnk = Rank(role.UserRoleName);
+
+                                    // Remove roles above yours, anything above Admin, and SuperAdmin
+                                    if (role.UserRoleName == "SuperAdmin" || rnk < myRank || rnk < adminRank)
+                                    {
+                                        continue;
+                                    }
+
                                     <tr>
                                         <td>@role.UserRoleName</td>
                                         <td class="text-center">
-                                            <input type="radio"
-                                                   name="SelectedRoleId"
-                                                   value="@role.UserRoleId"
+                                            <input type="radio" name="SelectedRoleId" value="@role.UserRoleId"
                                                    @(Model.SelectedRoleId == role.UserRoleId ? "checked" : "") />
                                         </td>
                                     </tr>

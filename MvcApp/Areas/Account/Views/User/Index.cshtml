@@ -1,44 +1,61 @@
-﻿@using System.Security.Claims 
+﻿@using System.Security.Claims
 @using MvcApp.Areas.Account.Models
 @model List<UserModel>
 @{
     ViewData["Title"] = "User Management";
-    var roles = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
 
-    var keywords = new[] { "SuperAdmin", "Admin", "Account Manager" };
-    bool isAllowed = roles.Any(role => keywords.Any(keyword => role.Contains(keyword)));
+    // --- role ranking / helpers ---
+    string[] roleOrder = { "SuperAdmin", "Account Admin", "Inventory Admin", "Admin", "User" };
+    int Rank(string r) => Array.IndexOf(roleOrder, r) >= 0 ? Array.IndexOf(roleOrder, r) : int.MaxValue;
+    int AdminRank = Rank("Admin");
 
-    var userId = User.Claims.FirstOrDefault(c => c.Type == "Userid")?.Value;
-    var userIdInt = int.Parse(userId);
+    int TryGetUserId(ClaimsPrincipal u)
+    {
+        var val = u.Claims.FirstOrDefault(c => c.Type == "Userid")?.Value;
+        return int.TryParse(val, out var id) ? id : 0;
+    }
+
+    int HighestRankOf(IEnumerable<string> roles) =>
+        roles?.Select(Rank).DefaultIfEmpty(int.MaxValue).Min() ?? int.MaxValue;
+
+    int HighestRankOfUserRoles(IEnumerable<UserRoleModel> roles) =>
+        roles?.Select(r => Rank(r.UserRoleName)).DefaultIfEmpty(int.MaxValue).Min() ?? int.MaxValue;
+
+    // current user context
+    var myId = TryGetUserId(User);
+    var myRoles = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
+    var myRank = HighestRankOf(myRoles);
+    bool iAmJustUser = (myRank >= Rank("User"));
+
+    // “Show Deleted” toggle allowed for Admin-or-better
+    bool canToggleDeleted = (myRank <= AdminRank);
+
+    bool IsSuperAccount(int uid) => uid == 1; // TestSuperUser1
+
+    // security note: enforce these again server-side on POST
 }
-
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
         <nav class="col-md-2 d-none d-md-block bg-light sidebar border-end vh-100 p-3">
             @await Html.PartialAsync("../Shared/SidebarNav.cshtml", "Index User")
         </nav>
 
-        <!-- Main content -->
         <main class="col-md-10 ms-sm-auto px-4 pt-4">
             <div class="text-center mb-4">
                 <h1 class="fw-bold text-primary">@ViewData["Title"]</h1>
                 <h4 class="text-muted">Manage registered users and their roles</h4>
             </div>
 
-            @if (Model.Count > 0)
+            @if (Model?.Count > 0 && canToggleDeleted)
             {
                 <div class="text-end mb-3">
-                    @if (isAllowed)
+                    @if (Model[0].ShowInactive)
                     {
-                        @if (Model[0].ShowInactive)
-                        {
-                            <a asp-action="Index" asp-route-ShowInactive="false" class="btn btn-outline-secondary">Hide Deleted</a>
-                        }
-                        else
-                        {
-                            <a asp-action="Index" asp-route-ShowInactive="true" class="btn btn-outline-secondary">Show Deleted</a>
-                        }
+                        <a asp-action="Index" asp-route-ShowInactive="false" class="btn btn-outline-secondary">Hide Deleted</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Index" asp-route-ShowInactive="true" class="btn btn-outline-secondary">Show Deleted</a>
                     }
                 </div>
             }
@@ -56,75 +73,54 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var user in Model)
+                            @foreach (var user in Model ?? Enumerable.Empty<UserModel>())
                             {
+                                var isSelf = (user.UserId == myId);
+                                var targetRank = HighestRankOfUserRoles(user.UserRoles ?? Enumerable.Empty<UserRoleModel>());
+
+                                // permissions per row
+                                bool canTouchSuper = !IsSuperAccount(user.UserId); // nobody edits/deletes/assigns #1
+                                bool canEditOthers = !iAmJustUser && canTouchSuper && (myRank <= targetRank);
+                                bool canDeleteOthers = canEditOthers; // same rule as edit
+                                bool canAssignRoles = !iAmJustUser && !isSelf && canTouchSuper && (myRank <= targetRank);
+
+                                // self-permissions: Users can only edit/delete themselves
+                                bool canEdit = isSelf || canEditOthers;
+                                bool canDelete = isSelf || canDeleteOthers;
+
                                 <tr>
                                     <td>@user.UserName</td>
                                     <td>@user.UserEmail</td>
                                     <td>
-                                        @if (user.UserRoles != null && user.UserRoles.Any())
-                                        {
-                                            @string.Join(", ", user.UserRoles.Select(r => r.UserRoleName))
-                                        }
-                                        else
-                                        {
-                                            <em>— none —</em>
-                                        }
+                                        @(user.UserRoles != null && user.UserRoles.Any() ? string.Join(", ", user.UserRoles.Select(r => r.UserRoleName)) : (object)Html.Raw("<em>— none —</em>"))
                                     </td>
-                                    @if (isAllowed || userIdInt == user.UserId)
-                                    {
-                                        @if (userIdInt == user.UserId)
+                                    <td class="text-center">
+                                        @if (canEdit && user.UserId != 1)
                                         {
-                                            @if (user.UserId != 1)
+                                            <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-sm btn-primary me-1">Edit</a>
+                                        }
+
+                                        @if (canAssignRoles)
+                                        {
+                                            <a asp-action="Assign" asp-route-id="@user.UserId" class="btn btn-sm btn-info me-1">Assign Roles</a>
+                                        }
+
+                                        @if (canDelete && user.UserId != 1)
+                                        {
+                                            if (user.IsActive)
                                             {
-                                                <td class="text-center">
-                                                    <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-sm btn-primary me-1">Edit</a>
-                                                    @if (user.IsActive)
-                                                    {
-                                                        <form asp-action="Delete" asp-route-id="@user.UserId" method="post" class="d-inline">
-                                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                                        </form>
-                                                    }
-                                                    else
-                                                    {
-                                                        <form asp-action="Undelete" asp-route-id="@user.UserId" method="post" class="d-inline">
-                                                            <button type="submit" class="btn btn-sm btn-success">Restore</button>
-                                                        </form>
-                                                        }
-                                                </td>
+                                                <form asp-action="Delete" asp-route-id="@user.UserId" method="post" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                </form>
                                             }
                                             else
                                             {
-                                                <td></td>
+                                                <form asp-action="Undelete" asp-route-id="@user.UserId" method="post" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-success">Restore</button>
+                                                </form>
                                             }
                                         }
-                                        else
-                                        {
-                                            <td class="text-center">
-                                                @if (user.UserId != 1)
-                                                {
-                                                    <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-sm btn-primary me-1">Edit</a>
-                                                    <a asp-action="Assign" asp-route-id="@user.UserId" class="btn btn-sm btn-info me-1">Assign Roles</a>
-                                                    @if (user.IsActive)
-                                                    {
-                                                        <form asp-action="Delete" asp-route-id="@user.UserId" method="post" class="d-inline">
-                                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                                        </form>
-                                                    }
-                                                    else
-                                                    {
-                                                        <form asp-action="Undelete" asp-route-id="@user.UserId" method="post" class="d-inline">
-                                                            <button type="submit" class="btn btn-sm btn-success">Restore</button>
-                                                        </form>
-                                                    }
-                                                }
-                                            </td>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <td></td>
-                                    }
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -133,7 +129,7 @@
             </div>
 
             <div class="alert alert-info text-center shadow-sm" role="alert">
-                <strong>Note:</strong> This page allows administrators to manage user accounts and assign roles.
+                <strong>Note:</strong> Super account is protected; you can’t assign roles to yourself; you can’t change roles above your rank; and a plain <em>User</em> may only manage their own account.
             </div>
         </main>
     </div>
