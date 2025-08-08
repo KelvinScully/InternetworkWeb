@@ -13,6 +13,12 @@ namespace MvcApp.Areas.Inventory.Controllers
         [HttpGet("[area]/[controller]/{showInactive:bool?}")]
         public async Task<IActionResult> Index(bool showInactive = false)
         {
+            if (User.IsInRole("Guest"))
+                return RedirectToAction("Gate", "Entry");
+
+            if (!User.IsInRole("SuperAdmin") && !User.IsInRole("Admin") && !User.IsInRole("Account Manager"))
+                return RedirectToAction("NoRole", "Entry");
+
             var model = await _Service.GetItem(showInactive);
             ViewData["ShowInactive"] = showInactive;
             return View(model);
@@ -21,6 +27,12 @@ namespace MvcApp.Areas.Inventory.Controllers
         [HttpGet("[area]/[controller]/Create")]
         public async Task<IActionResult> Create()
         {
+            if (User.IsInRole("Guest"))
+                return RedirectToAction("Gate", "Entry");
+
+            if (!User.IsInRole("SuperAdmin") && !User.IsInRole("Admin") && !User.IsInRole("Account Manager"))
+                return RedirectToAction("NoRole", "Entry");
+
             await LoadDropdownsAsync();
             return View(new ItemModel());
         }
@@ -28,13 +40,18 @@ namespace MvcApp.Areas.Inventory.Controllers
         [HttpGet("[area]/[controller]/Edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
+            if (User.IsInRole("Guest"))
+                return RedirectToAction("Gate", "Entry");
+
+            if (!User.IsInRole("SuperAdmin") && !User.IsInRole("Admin") && !User.IsInRole("Account Manager"))
+                return RedirectToAction("NoRole", "Entry");
+
             await LoadDropdownsAsync();
             var model = await _Service.GetItem(id);
             return View(model);
         }
 
         [HttpPost("[area]/[controller]/Insert")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Insert(ItemModel model)
         {
             if (!ModelState.IsValid)
@@ -65,7 +82,6 @@ namespace MvcApp.Areas.Inventory.Controllers
         }
 
         [HttpPost("[area]/[controller]/Update")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(ItemModel model)
         {
             if (!ModelState.IsValid)
@@ -86,7 +102,6 @@ namespace MvcApp.Areas.Inventory.Controllers
         }
 
         [HttpPost("[area]/[controller]/Delete/{id}")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _Service.DeleteItem(id);

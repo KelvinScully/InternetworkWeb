@@ -18,6 +18,12 @@ namespace MvcApp.Areas.Inventory.Controllers
         [HttpGet("[area]/[controller]/{ShowInactive}")]
         public async Task<IActionResult> Index(bool ShowInactive)
         {
+            if (User.IsInRole("Guest"))
+                return RedirectToAction("Gate", "Entry");
+
+            if (!User.IsInRole("SuperAdmin") && !User.IsInRole("Admin") && !User.IsInRole("Account Manager"))
+                return RedirectToAction("NoRole", "Entry");
+
             var model = await _Service.GetItemStatus(ShowInactive);
             return View(model);
         }
@@ -25,6 +31,12 @@ namespace MvcApp.Areas.Inventory.Controllers
         [HttpGet("[area]/[controller]/Create")]
         public async Task<IActionResult> Create()
         {
+            if (User.IsInRole("Guest"))
+                return RedirectToAction("Gate", "Entry");
+
+            if (!User.IsInRole("SuperAdmin") && !User.IsInRole("Admin") && !User.IsInRole("Account Manager"))
+                return RedirectToAction("NoRole", "Entry");
+
             ItemStatusModel model = new();
             return View(model);
         }
@@ -32,6 +44,12 @@ namespace MvcApp.Areas.Inventory.Controllers
         [HttpGet("[area]/[controller]/Edit/{Id}")]
         public async Task<IActionResult> Edit(int Id)
         {
+            if (User.IsInRole("Guest"))
+                return RedirectToAction("Gate", "Entry");
+
+            if (!User.IsInRole("SuperAdmin") && !User.IsInRole("Admin") && !User.IsInRole("Account Manager"))
+                return RedirectToAction("NoRole", "Entry");
+
             ItemStatusModel model = await _Service.GetItemStatus(Id);
             return View(model);
         }
