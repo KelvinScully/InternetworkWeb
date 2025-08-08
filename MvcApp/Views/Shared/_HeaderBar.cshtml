@@ -2,9 +2,19 @@
 @{
     var username = User.Identity?.IsAuthenticated == true ? User.Identity.Name : "Guest";
     var roles = User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
-    var highestRole = roles.Any() ? roles.First() : "Guest";
-    var isGuest = roles.Contains("Guest");
+
+    // Define custom role priority
+    string[] roleOrder = new[] { "SuperAdmin", "Account Admin", "Inventory Admin", "Admin" };
+
+    // Sort roles: if role is in the array, use its index; otherwise, put it after the known roles (int.MaxValue)
+    var sortedRoles = roles
+        .OrderBy(r => Array.IndexOf(roleOrder, r) >= 0 ? Array.IndexOf(roleOrder, r) : int.MaxValue)
+        .ToList();
+
+    var highestRole = sortedRoles.Any() ? sortedRoles.First() : "Guest";
+    var isGuest = sortedRoles.Contains("Guest");
 }
+
 
 <div style="">
     <div class="container">
