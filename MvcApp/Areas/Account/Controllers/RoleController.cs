@@ -19,9 +19,6 @@ namespace MvcApp.Areas.Account.Controllers
             if (User.IsInRole("Guest"))
                 return RedirectToAction("Gate", "Entry");
 
-            if (!User.IsInRole("SuperAdmin") && !User.IsInRole("Admin") && !User.IsInRole("Account Manager"))
-                return RedirectToAction("NoRole", "Entry");
-
             var model = await _Service.GetUserRole(ShowInactive);
             return View(model);
         }
