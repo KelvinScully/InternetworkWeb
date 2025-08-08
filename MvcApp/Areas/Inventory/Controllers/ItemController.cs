@@ -6,60 +6,35 @@ using MvcApp.Services;
 namespace MvcApp.Areas.Inventory.Controllers
 {
     [Area("Inventory")]
-    public class ItemController : Controller
+    public class ItemController(IInventoryService service) : Controller
     {
-        private readonly IInventoryService _Service;
+        private readonly IInventoryService _Service = service;
 
-        public ItemController(IInventoryService service)
+        [HttpGet("[area]/[controller]/{showInactive:bool?}")]
+        public async Task<IActionResult> Index(bool showInactive = false)
         {
-            _Service = service;
-        }
-
-        private async Task LoadDropdownsAsync()
-        {
-            // TEMPORARY hardcoded test data
-            var categories = new[]
-            {
-                new { CategoryId = 1, ItemCategoryName = "Electronics" },
-                new { CategoryId = 2, ItemCategoryName = "Furniture" },
-                new { CategoryId = 3, ItemCategoryName = "Office Supplies" }
-            };
-
-            var locations = new[]
-            {
-                new { LocationId = 1, ItemLocationName = "Main Warehouse" },
-                new { LocationId = 2, ItemLocationName = "Front Office" },
-                new { LocationId = 2, ItemLocationName = "Storage Room" }
-            };
-
-            var statuses = new[]
-            {
-                new { StatusId = 4, ItemStatusName = "Available" },
-                new { StatusId = 5, ItemStatusName = "Out of Stock" }
-            };
-
-            ViewData["Categories"] = new SelectList(categories, "CategoryId", "ItemCategoryName");
-            ViewData["Locations"] = new SelectList(locations, "LocationId", "ItemLocationName");
-            ViewData["Statuses"] = new SelectList(statuses, "StatusId", "ItemStatusName");
-        }
-
-
-
-        [HttpGet("[area]/[controller]")]
-        public async Task<IActionResult> Index()
-        {
-            var items = await _Service.GetItem(false);
-            return View(items);
+            var model = await _Service.GetItem(showInactive);
+            ViewData["ShowInactive"] = showInactive;
+            return View(model);
         }
 
         [HttpGet("[area]/[controller]/Create")]
         public async Task<IActionResult> Create()
         {
             await LoadDropdownsAsync();
-            return View(new ItemModel { ItemId = 0 });
+            return View(new ItemModel());
+        }
+
+        [HttpGet("[area]/[controller]/Edit/{id}")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            await LoadDropdownsAsync();
+            var model = await _Service.GetItem(id);
+            return View(model);
         }
 
         [HttpPost("[area]/[controller]/Insert")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Insert(ItemModel model)
         {
             if (!ModelState.IsValid)
@@ -68,8 +43,17 @@ namespace MvcApp.Areas.Inventory.Controllers
                 return View("Create", model);
             }
 
-            var result = await _Service.InsertItem(model);
+            // Pre-check for duplicate item name (case + trim insensitive)
+            var existing = await _Service.GetItem(true); // include inactive in the check
+            if (existing.Any(x =>
+                string.Equals(x.ItemName?.Trim(), model.ItemName?.Trim(), StringComparison.OrdinalIgnoreCase)))
+            {
+                ModelState.AddModelError(nameof(model.ItemName), "That item name already exists.");
+                await LoadDropdownsAsync();
+                return View("Create", model);
+            }
 
+            var result = await _Service.InsertItem(model);
             if (!result.IsSuccessful)
             {
                 ModelState.AddModelError("", result.Message);
@@ -77,18 +61,11 @@ namespace MvcApp.Areas.Inventory.Controllers
                 return View("Create", model);
             }
 
-            return RedirectToAction("Index");
-        }
-
-        [HttpGet("[area]/[controller]/Edit/{Id}")]
-        public async Task<IActionResult> Edit(int Id)
-        {
-            var item = await _Service.GetItem(Id);
-            await LoadDropdownsAsync();
-            return View(item);
+            return RedirectToAction(nameof(Index), new { showInactive = false });
         }
 
         [HttpPost("[area]/[controller]/Update")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(ItemModel model)
         {
             if (!ModelState.IsValid)
@@ -98,7 +75,6 @@ namespace MvcApp.Areas.Inventory.Controllers
             }
 
             var result = await _Service.UpdateItem(model);
-
             if (!result.IsSuccessful)
             {
                 ModelState.AddModelError("", result.Message);
@@ -106,7 +82,30 @@ namespace MvcApp.Areas.Inventory.Controllers
                 return View("Edit", model);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index), new { showInactive = false });
+        }
+
+        [HttpPost("[area]/[controller]/Delete/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _Service.DeleteItem(id);
+            if (!result.IsSuccessful)
+                TempData["Error"] = result.Message;
+
+            return RedirectToAction(nameof(Index), new { showInactive = false });
+        }
+
+        private async Task LoadDropdownsAsync()
+        {
+            var categories = await _Service.GetItemCategory(false);
+            ViewData["Categories"] = new SelectList(categories, "ItemCategoryId", "ItemCategoryName");
+
+            var locations = await _Service.GetItemLocation(false);
+            ViewData["Locations"] = new SelectList(locations, "ItemLocationId", "ItemLocationName");
+
+            var statuses = await _Service.GetItemStatus(false);
+            ViewData["Statuses"] = new SelectList(statuses, "ItemStatusId", "ItemStatusName");
         }
     }
 }

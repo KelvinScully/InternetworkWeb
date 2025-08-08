@@ -4,9 +4,41 @@
     <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Inventory" asp-action="Index" role="button">
         &ensp;Inventory
     </a>
+    @if (Model.Contains("Item"))
+    {
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Item" asp-action="Index" asp-route-ShowInactive="false" role="button">
+            @if (Model.Contains("Create") || Model.Contains("Edit"))
+            {
+                <z>Item</z>
+            }
+            else
+            {
+                <strong>Item</strong>
+            }
+        </a>
+
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Item" asp-action="Create" role="button">
+            &ensp;&ensp;
+            @if (Model.Contains("Create") || Model.Contains("Edit"))
+            {
+                <strong>Add Item</strong>
+            }
+            else
+            {
+                <z>Add Item</z>
+            }
+        </a>
+    }
+    else
+    {
+
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Item" asp-action="Index" asp-route-ShowInactive="false" role="button">
+            &ensp;Item
+        </a>
+    }
     @if (Model.Contains("Category"))
     {
-        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Category" asp-action="Index" role="button">
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Category" asp-action="Index" asp-route-ShowInactive="false" role="button">
             @if (Model.Contains("Create") || Model.Contains("Edit"))
             { <z>Category</z> }
             else
@@ -24,13 +56,13 @@
     else
     {
 
-        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Category" asp-action="Index" role="button">
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Category" asp-action="Index" asp-route-ShowInactive="false" role="button">
             &ensp;Category
         </a>
     }
     @if (Model.Contains("Location"))
     {
-        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Location" asp-action="Index" role="button">
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Location" asp-action="Index" asp-route-ShowInactive="false" role="button">
             @if (Model.Contains("Create") || Model.Contains("Edit"))
             { <z>Location</z> }
             else
@@ -48,7 +80,7 @@
     else
     {
 
-        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Location" asp-action="Index" role="button">
+        <a class="dropdown-item text-start" style="padding-bottom: 10px" asp-area="Inventory" asp-controller="Location" asp-action="Index" asp-route-ShowInactive="false" role="button">
             &ensp;Location
         </a>
     }

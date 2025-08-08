@@ -1,6 +1,9 @@
-﻿@model MvcApp.Areas.Inventory.Models.ItemModel
+﻿@using MvcApp.Areas.Inventory.Models
+@model ItemModel
 
 @{
+    ViewData["Title"] = "Create Item";
+
     var categories = ViewData["Categories"] as SelectList;
 
     var locations = ViewData["Locations"] as SelectList;
@@ -8,57 +11,75 @@
     var statuses = ViewData["Statuses"] as SelectList;
 }
 
-<h2>Add New Inventory Item</h2>
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-1 d-none d-md-block sidebar">
+            @await Html.PartialAsync("../Shared/SidebarNav.cshtml", "Create Item")
+        </nav>
 
-@* Enables client-side validation *@
-<partial name="_ValidationScriptsPartial" />
+        <div class="col-xl-10 px-4">
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-6"><h1 class="text-center">@ViewData["Title"]</h1></div>
+                <div class="col-3"></div>
+            </div>
 
-<form asp-action="Insert" method="post">
-    @Html.AntiForgeryToken()
+            <partial name="_ValidationScriptsPartial" />
 
-    @* Validation summary *@
-    <div asp-validation-summary="All" class="text-danger"></div>
+            <form asp-area="Inventory" asp-controller="Item" asp-action="Insert" method="post" id="FormItem">
+                @Html.AntiForgeryToken()
 
-    <div class="form-group">
-        <label asp-for="ItemName"></label>
-        <input asp-for="ItemName" class="form-control" />
-        <span asp-validation-for="ItemName" class="text-danger"></span>
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="mb-3 col-md-3">
+                    <h5>Item Name</h5>
+                    <div class="mb-3">
+                        <input type="text" asp-for="ItemName" class="form-control" placeholder="Enter Name" />
+                        <span asp-validation-for="ItemName" class="text-danger"></span>
+                    </div>
+
+                    <h5>Item Quantity</h5>
+                    <div class="mb-3">
+                        <input type="number" step="1" asp-for="ItemQuantity" class="form-control" placeholder="Enter Quantity" />
+                        <span asp-validation-for="ItemQuantity" class="text-danger"></span>
+                    </div>
+
+                    <h5>Item Category</h5>
+                    <div class="mb-3">
+                        <select asp-for="CategoryId" asp-items="categories" class="form-control">
+                            <option value="">-- Select Category --</option>
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+                    </div>
+
+                    <h5>Item Location</h5>
+                    <div class="mb-3">
+                        <select asp-for="LocationId" asp-items="locations" class="form-control">
+                            <option value="">-- Select Location --</option>
+                        </select>
+                        <span asp-validation-for="LocationId" class="text-danger"></span>
+                    </div>
+
+                    <h5>Item Status</h5>
+                    <div class="mb-3">
+                        <select asp-for="StatusId" asp-items="statuses" class="form-control">
+                            <option value="">-- Select Status --</option>
+                        </select>
+                        <span asp-validation-for="StatusId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="dropdown-divider"></div>
+
+                <div class="row justify-content-end p-4">
+                    <div class="col-2 p-1">
+                        <button class="btn btn-primary btn-block" id="SubmitButton" type="submit">Submit</button>
+                    </div>
+                    <div class="col-2 p-1">
+                        <a class="btn btn-secondary btn-block" asp-area="Inventory" asp-controller="Item" asp-action="Index" asp-route-showInactive="false">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label asp-for="ItemQuantity"></label>
-        <input asp-for="ItemQuantity" class="form-control" />
-        <span asp-validation-for="ItemQuantity" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="CategoryId"></label>
-        <select asp-for="CategoryId" asp-items="categories" class="form-control">
-            <option value="">-- Select Category --</option>
-        </select>
-        <span asp-validation-for="CategoryId" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="LocationId"></label>
-        <select asp-for="LocationId" asp-items="locations" class="form-control">
-            <option value="">-- Select Location --</option>
-        </select>
-        <span asp-validation-for="LocationId" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="StatusId"></label>
-        <select asp-for="StatusId" asp-items="statuses" class="form-control">
-            <option value="">-- Select Status --</option>
-        </select>
-        <span asp-validation-for="StatusId" class="text-danger"></span>
-    </div>
-
-    <div class="form-check">
-        <input asp-for="IsActive" class="form-check-input" />
-        <label asp-for="IsActive" class="form-check-label"></label>
-    </div>
-
-    <button type="submit" class="btn btn-success mt-3">Save</button>
-</form>
+</div>
