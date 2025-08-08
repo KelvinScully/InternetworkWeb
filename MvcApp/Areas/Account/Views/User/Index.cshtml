@@ -30,6 +30,7 @@
                     <tr>
                         <th>Username</th>
                         <th>Email</th>
+                        <th>Roles</th>              <!-- ← new column -->
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -40,7 +41,18 @@
                             <td>@user.UserName</td>
                             <td>@user.UserEmail</td>
                             <td>
+                                @if (user.UserRoles != null && user.UserRoles.Any())
+                                {
+                                    @string.Join(", ", user.UserRoles.Select(r => r.UserRoleName))
+                                }
+                                else
+                                {
+                                    <em>— none —</em>
+                                }
+                            </td>
+                            <td>
                                 <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-sm btn-primary">Edit</a>
+                                <a asp-action="Assign" asp-route-id="@user.UserId" class="btn btn-sm btn-info">Assign Roles</a>
                                 @if (user.IsActive)
                                 {
                                     <form asp-action="Delete" asp-route-id="@user.UserId" method="post" class="d-inline">
