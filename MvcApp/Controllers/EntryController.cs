@@ -20,7 +20,7 @@ namespace MvcApp.Areas.Account.Controllers
         public IActionResult Index()
         {
             if (User.IsInRole("Guest"))
-                return RedirectToAction("Index", "Gate");
+                return RedirectToAction("Gate");
 
             return RedirectToAction("Index", "Home");
         }
