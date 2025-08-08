@@ -1,8 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Inventory Landing";
 }
-
-
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
@@ -26,27 +24,27 @@
                 <div class="col-md-4">
                     <div class="card border-0 shadow-sm">
                         <div class="card-body">
-                            <h6 class="text-muted">Planned Items</h6>
-                            <h2 class="text-primary fw-bold">+120</h2>
-                            <p class="mb-0">Total Inventory Records</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body">
                             <h6 class="text-muted">Categories</h6>
-                            <h2 class="text-success fw-bold">6</h2>
-                            <p class="mb-0">Product Types</p>
+                            <h2 class="text-success fw-bold">Active</h2>
+                            <p class="mb-0">Track an item's Category</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card border-0 shadow-sm">
                         <div class="card-body">
-                            <h6 class="text-muted">Integration</h6>
-                            <h2 class="text-warning fw-bold">Pending</h2>
-                            <p class="mb-0">Audit Log Sync</p>
+                            <h6 class="text-muted">Locations</h6>
+                            <h2 class="text-success fw-bold">Active</h2>
+                            <p class="mb-0">Track an item's location</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-muted">Statuses</h6>
+                            <h2 class="text-success fw-bold">Active</h2>
+                            <p class="mb-0">Track an item's stauts</p>
                         </div>
                     </div>
                 </div>
@@ -55,7 +53,7 @@
             <!-- Main Cards -->
             <div class="row g-4">
                 <!-- Inventory Ops -->
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="card h-100 border-0 shadow-sm">
                         <div class="card-body">
                             <h5 class="card-title">📦 Inventory Operations</h5>
@@ -63,31 +61,14 @@
                                 <li>✔ View and list items</li>
                                 <li>✔ Create new inventory entries</li>
                                 <li>✔ Edit and delete existing items</li>
-                                <li>✔ Filter by category, location, or status</li>
                             </ul>
                         </div>
                     </div>
                 </div>
-
-                <!-- Future plans -->
-                <div class="col-md-6">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">🚀 Future Enhancements</h5>
-                            <ul class="list-unstyled">
-                                <li>✔ Low-stock alert system</li>
-                                <li>✔ Stock analytics dashboard</li>
-                                <li>✔ Audit log integration for item changes</li>
-                            </ul>
-                            <p class="text-muted small mt-3">Note: These features were designed but not implemented due to time limitations.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Notice -->
             <div class="alert alert-info text-center mt-5 shadow-sm" role="alert">
-                <strong>Note:</strong> This page represents planned functionalities only.
+                <strong>Note:</strong> This page represents working operations only
             </div>
         </main>
     </div>
