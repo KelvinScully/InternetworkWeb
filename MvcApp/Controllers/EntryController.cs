@@ -20,7 +20,7 @@ namespace MvcApp.Areas.Account.Controllers
         public IActionResult Index()
         {
             if (User.IsInRole("Guest"))
-                return RedirectToAction("Gate");
+                return RedirectToAction("Index", "Home");
 
             return View();
         }
@@ -72,7 +72,7 @@ namespace MvcApp.Areas.Account.Controllers
                 return RedirectToAction("Gate");
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost("Register")]
@@ -105,7 +105,7 @@ namespace MvcApp.Areas.Account.Controllers
                 return RedirectToAction("Gate");
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost("Logout")]
