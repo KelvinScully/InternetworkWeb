@@ -58,12 +58,15 @@
                                     @if (isAllowed)
                                     {
                                         <td class="text-center">
-                                            <a asp-action="Edit" asp-route-id="@role.UserRoleId" class="btn btn-sm btn-primary me-1">Edit</a>
-                                            @if (role.IsActive)
+                                            @if (!string.Equals(role.UserRoleName, "SuperAdmin"))
                                             {
-                                                <form asp-action="Delete" asp-route-id="@role.UserRoleId" method="post" class="d-inline">
-                                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                                </form>
+                                                <a asp-action="Edit" asp-route-id="@role.UserRoleId" class="btn btn-sm btn-primary me-1">Edit</a>
+                                                @if (role.IsActive)
+                                                {
+                                                    <form asp-action="Delete" asp-route-id="@role.UserRoleId" method="post" class="d-inline">
+                                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                    </form>
+                                                }
                                             }
                                         </td>
                                     }
