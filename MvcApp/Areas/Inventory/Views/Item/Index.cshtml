@@ -45,7 +45,11 @@
                     <table class="table table-hover table-striped align-middle">
                         <thead class="table-light">
                             <tr>
-                                <th width="80%">Name</th>
+                                <th>Name</th>
+                                <th>Quantity</th>
+                                <th>Category</th>
+                                <th>Location</th>
+                                <th>Status</th>
                                 <th class="text-center">Actions</th>
                             </tr>
                         </thead>
@@ -56,6 +60,10 @@
                                 {
                                     <tr>
                                         <td>@Item.ItemName</td>
+                                        <td>@Item.ItemQuantity</td>
+                                        <td>@Item.ItemCategoryName</td>
+                                        <td>@Item.ItemLocationName</td>
+                                        <td>@Item.ItemStatusName</td>
                                         @if (isAllowed)
                                         {
                                             <td class="text-center">
