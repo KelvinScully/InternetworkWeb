@@ -20,9 +20,9 @@ namespace MvcApp.Areas.Account.Controllers
         public IActionResult Index()
         {
             if (User.IsInRole("Guest"))
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Gate");
 
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         // Login/Register modals
