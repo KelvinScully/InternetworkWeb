@@ -6,7 +6,7 @@
     // Rules:
     // 1) o one can delete TestSuperUser1
     // 2) You can only assign your rank or lower (i.e., worse/equal privilege)
-    string[] roleOrder = { "SuperAdmin", "Admin", "Account Admin", "Inventory Admin", "User" };
+    string[] roleOrder = { "SuperAdmin", "Admin", "Account Manager", "Inventory Manager", "User" };
     int Rank(string r) => Array.IndexOf(roleOrder, r) >= 0 ? Array.IndexOf(roleOrder, r) : int.MaxValue;
     var myRank = User.Claims
         .Where(c => c.Type == ClaimTypes.Role)

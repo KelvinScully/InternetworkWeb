@@ -5,7 +5,7 @@
     ViewData["Title"] = "User Management";
 
     // --- role ranking / helpers ---
-    string[] roleOrder = { "SuperAdmin", "Account Admin", "Inventory Admin", "Admin", "User" };
+    string[] roleOrder = { "SuperAdmin", "Admin", "Account Manager", "Inventory Manager", "User" };
     int Rank(string r) => Array.IndexOf(roleOrder, r) >= 0 ? Array.IndexOf(roleOrder, r) : int.MaxValue;
     int AdminRank = Rank("Admin");
 
